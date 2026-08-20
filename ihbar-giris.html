@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Maksima · Hasar İhbar Girişi</title>
+<style>
+  :root{
+    /* Pantone 2026 paleti: Cloud Dancer + Blue Fusion + Veiled Vista */
+    --navy:#556E7D;--navy-700:#46606D;--navy-050:#E9EFF1;   /* Blue Fusion */
+    --gold:#68D8D6;--gold-soft:#DDF4F3;                     /* Mint vurgu */
+    --emerald:#2FA3A0;--emerald-soft:#DDF4F3;
+    --amber-soft:#F1EAD8;--rose:hsl(350 52% 52%);--rose-soft:hsl(350 50% 96%);
+    --cream:#F1EFE8;--ink:#2C3A42;--muted:#66757F;          /* Cloud Dancer zemin */
+    --line:#E4E1D8;--card:#fff;--radius:0.9rem;
+    --shadow:0 1px 2px hsl(205 22% 32% / .06),0 8px 24px hsl(205 22% 32% / .07);
+  }
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .app-header{background:var(--navy);color:#fff;padding:12px 22px;display:flex;align-items:center;gap:13px;position:sticky;top:0;z-index:20}
+  .brand-mark{width:36px;height:36px;border-radius:9px;background:#F1EFE8;display:grid;place-items:center;font-weight:800;color:var(--navy);font-size:17px}
+  .brand-mark small{font-size:9px}
+  .app-header h1{font-size:14.5px;margin:0;font-weight:600}
+  .app-header .sub{font-size:11px;color:#C2CDD3;margin-top:1px}
+  .spec-flag{margin-left:auto;font-size:11px;background:hsl(0 0% 100% / .14);padding:5px 11px;border-radius:999px;color:#D2DAC4}
+
+  .wrap{max-width:1060px;margin:20px auto;padding:0 18px;display:grid;grid-template-columns:1fr 270px;gap:20px}
+  @media (max-width:880px){.wrap{grid-template-columns:1fr}}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+  .card h2{font-size:16px;margin:0 0 3px} .card .lead{font-size:12.5px;color:var(--muted);margin:0 0 18px}
+
+  .sec-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--navy);font-weight:700;margin:22px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+  .sec-title:first-of-type{margin-top:4px}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px} .full{grid-column:1/-1}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}}
+  label.f{display:block;font-size:11.5px;font-weight:600;margin-bottom:4px} label.f .req{color:var(--rose)}
+  input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px;background:#fff;color:var(--ink);transition:.15s}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px var(--navy-050)}
+  textarea{resize:vertical;min-height:56px}
+  .inline{display:flex;gap:7px;align-items:center} .inline>select,.inline>input{flex:1}
+
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 14px;border-radius:9px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{border-color:var(--navy);color:var(--navy)}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff} .btn.primary:hover{background:var(--navy-700)}
+  .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy-700)}
+  .btn.ghost{background:transparent} .btn.sm{padding:6px 10px;font-size:11.5px} .btn.lg{padding:11px 22px;font-size:13.5px}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+
+  .bedel-block{border:1px solid var(--line);border-radius:10px;padding:12px}
+  .bedel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .bedel-head .t{font-size:11.5px;font-weight:600;color:var(--muted)}
+  .bedel-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+  @media (max-width:560px){.bedel-grid{grid-template-columns:1fr}}
+  .bedel-item{display:flex;align-items:center;gap:8px}
+  .bedel-item label{font-size:11.5px;min-width:110px} .bedel-item input{padding:6px 8px;font-size:12.5px;text-align:right}
+
+  .opt-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .opt-row:last-child{border-bottom:none}
+  .opt-row .chk{display:flex;align-items:center;gap:8px;min-width:210px;font-size:12.5px;font-weight:600;cursor:pointer;user-select:none}
+  .opt-row input[type=checkbox]{width:17px;height:17px;accent-color:var(--navy);cursor:pointer}
+  .opt-row .amt{flex:1;display:flex;align-items:center;gap:6px}
+  .opt-row .amt input{text-align:right} .opt-row .amt .cur{font-size:12px;color:var(--muted)}
+  .opt-row .amt.dis{opacity:.4;pointer-events:none}
+
+  .pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:999px}
+  .pill.navy{background:var(--navy-050);color:var(--navy)} .pill.rose{background:var(--rose-soft);color:var(--rose)}
+  .banner{border-radius:9px;padding:9px 12px;font-size:12px;display:flex;gap:8px;align-items:flex-start;margin-top:12px}
+  .banner .ico{flex:none;font-size:14px} .hidden{display:none!important}
+  .banner.danger{background:var(--rose-soft);color:hsl(350 55% 34%);border:1px solid hsl(350 60% 88%)}
+  .banner.info{background:var(--navy-050);color:var(--navy);border:1px solid hsl(222 30% 86%)}
+
+  .side{position:sticky;top:70px;align-self:start}
+  .side h3{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 11px}
+  .kv{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+  .kv:last-child{border-bottom:none} .kv .k{color:var(--muted)} .kv .v{font-weight:600;text-align:right}
+  .side .rapor-no{font-size:17px;font-weight:800;color:var(--navy)}
+
+  .actionbar{display:flex;justify-content:flex-end;gap:10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+
+  /* ============ ŞABLON ÖNİZLEME (kayıttan sonra) ============ */
+  #previewView{display:none}
+  .pv-bar{max-width:900px;margin:18px auto 0;padding:0 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .pv-bar .t{font-size:13px;color:var(--muted)}
+  .pv-bar .t b{color:var(--ink)}
+  .paper{max-width:900px;margin:14px auto 40px;background:#fff;box-shadow:var(--shadow);border:1px solid var(--line);border-radius:6px;padding:40px 46px}
+
+  /* ============ FORM ÇIKTISI (ekran + yazdırma birebir) ============ */
+  #printSheet{font-family:Arial,Helvetica,sans-serif;color:#000;font-size:12.5px;line-height:1.5}
+  #printSheet .p-top{display:flex;justify-content:space-between;align-items:flex-start}
+  #printSheet .p-firm h4{margin:0 0 4px;font-size:15px;font-weight:bold}
+  #printSheet .p-firm p{margin:0;font-size:11px;line-height:1.35}
+  #printSheet .p-firm .tel{margin-top:6px}
+  #printSheet .p-meta{font-size:12px;min-width:270px}
+  #printSheet .p-meta .mrow{display:flex;align-items:flex-end;margin-bottom:5px}
+  #printSheet .p-meta .mk{min-width:78px} #printSheet .p-meta .mv{flex:1;border-bottom:1px solid #000;padding:0 6px 1px;min-height:15px}
+  #printSheet .p-title{text-align:center;font-size:15px;font-weight:bold;margin:16px 0 2px}
+  #printSheet .p-brans{text-align:center;font-size:13.5px;font-weight:bold;margin-bottom:14px}
+  #printSheet .p-row{display:flex;align-items:flex-end;margin-bottom:7px;min-height:17px}
+  #printSheet .p-row .pl{min-width:216px;font-weight:bold;font-size:12.5px}
+  #printSheet .p-row .pc{margin:0 4px} #printSheet .p-row .pv{flex:1;border-bottom:1px solid #000;padding:0 4px 1px;min-height:16px}
+  #printSheet .p-bedel{display:flex;margin-bottom:7px}
+  #printSheet .p-bedel .pl{min-width:216px;font-weight:bold;font-size:12.5px;padding-top:2px}
+  #printSheet .p-bedel .bg{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:5px 26px}
+  #printSheet .p-bedel .bi{display:flex;align-items:flex-end}
+  #printSheet .p-bedel .bi .bl{min-width:118px} #printSheet .p-bedel .bi .bc{margin:0 3px}
+  #printSheet .p-bedel .bi .bv{flex:1;border-bottom:1px solid #000;text-align:right;padding:0 4px 1px;min-height:15px}
+  #printSheet .p-bedel .bi .bu{min-width:34px;text-align:right;padding-left:5px}
+  #printSheet .p-extra{margin-top:14px;padding-top:10px;border-top:1.5px solid #000}
+  /* logo alanı */
+  #printSheet .p-left{display:flex;gap:14px;align-items:flex-start}
+  #printSheet .p-logo{width:80px;height:80px;flex:none;border:1px dashed #c4c4c4;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #printSheet .p-logo img{max-width:100%;max-height:100%;object-fit:contain}
+  #printSheet .p-logo:empty::before{content:"Logo";font-size:10px;color:#b0b0b0}
+  @media print{
+    body *{visibility:hidden}
+    #printSheet,#printSheet *{visibility:visible}
+    .pv-bar,.app-header{display:none!important}
+    .paper{box-shadow:none;border:none;margin:0;padding:0;max-width:100%;border-radius:0}
+    #printSheet{position:absolute;left:0;top:0;width:100%;padding:13mm 14mm}
+    #printSheet .p-logo{border:none}          /* boş logo kutusu baskıda görünmez */
+    #printSheet .p-logo:empty::before{content:none}
+    @page{size:A4;margin:0}                    /* tarayıcı başlık/altbilgisini (tarih,url,başlık) kaldırır */
+  }
+
+  /* ---- Paket 2: mod, tören, süre ---- */
+  .mode-sw{display:inline-flex;background:var(--navy-050);border-radius:10px;padding:3px;margin:2px 0 14px}
+  .mode-sw button{border:none;background:none;padding:7px 16px;border-radius:8px;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
+  .mode-sw button.on{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
+  #modeNote{display:none;font-size:11.5px;color:var(--muted);margin:-6px 0 14px}
+  #formView.quick #modeNote{display:block}
+  #formView.quick .det{display:none!important}
+  .pv-done{max-width:900px;margin:18px auto -8px;padding:0 18px}
+  .pv-done .inner{background:var(--emerald-soft);border:1px solid #a9ddd0;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:11px;font-size:13px;color:hsl(160 45% 22%)}
+  .pv-done svg{flex:none;color:var(--emerald)}
+  .pv-done .no{font-weight:800;color:var(--navy)}
+
+  /* ---- Paket 1: hata, taslak, belge ---- */
+  .f-err{border-color:var(--rose)!important;box-shadow:0 0 0 3px var(--rose-soft)!important}
+  .err-msg{font-size:11px;color:var(--rose);margin-top:4px;font-weight:600}
+  #draftBanner{max-width:1060px;margin:14px auto -6px;padding:0 18px}
+  #draftBanner .inner{background:var(--amber-soft);border:1px solid hsl(41 45% 78%);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px;flex-wrap:wrap}
+  #draftBanner .sp{flex:1}
+  .belge-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .belge-item{display:flex;align-items:center;gap:9px;font-size:12.5px;background:var(--navy-050);border-radius:8px;padding:7px 11px}
+  .belge-item svg{flex:none;color:var(--navy)}
+  .belge-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+  .belge-item .sz{color:var(--muted);font-size:11px;white-space:nowrap}
+  .belge-item button{border:none;background:none;color:var(--rose);cursor:pointer;font-weight:700;font-size:14px;padding:2px 6px;line-height:1}
+  .belge-note{font-size:11px;color:var(--muted);margin-top:7px}
+  .drop{border:1.5px dashed var(--line);border-radius:10px;padding:14px;text-align:center;font-size:12.5px;color:var(--muted);cursor:pointer;transition:.15s}
+  .drop:hover,.drop.over{border-color:var(--navy);color:var(--navy);background:var(--navy-050)}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="brand-mark">M<small>x</small></div>
+  <div>
+    <h1>Maksima Eksperlik · Hasar İhbar Girişi</h1>
+    <div class="sub">Hızlı giriş → birebir A4 form çıktısı</div>
+  </div>
+  <span class="spec-flag">Prototip</span>
+</header>
+
+<!-- ==================== FORM GİRİŞ ==================== -->
+<div id="formView">
+<div id="draftBanner" class="hidden"><div class="inner"><b>Yarım kalan ihbar bulundu.</b><span id="draftInfo"></span><span class="sp"></span><button class="btn sm gold" id="draftResume" type="button">Devam Et</button><button class="btn sm" id="draftDiscard" type="button">Yok Say</button></div></div>
+<div class="wrap">
+  <div class="card">
+    <h2>Hasar İhbar Girişi</h2>
+    <p class="lead">Bu alan raporun ön yüzüne eklenecek olan bilgilerden oluşur.</p>
+    <div class="mode-sw"><button id="modeQuick" type="button">Hızlı Giriş</button><button id="modeDetay" type="button" class="on">Detaylı Giriş</button></div>
+    <div id="modeNote">Yalnız temel alanlar görünür — detaylar kayıttan sonra da tamamlanabilir.</div>
+
+    <div class="grid">
+      <div>
+        <label class="f">Branş <span class="req">*</span></label>
+        <div class="inline"><select id="brans"></select><button class="btn sm" id="addCatBtn" type="button">+ Branş</button></div>
+      </div>
+      <div>
+        <label class="f">Sigorta Şirketi <span class="req">*</span></label>
+        <input id="sigortaSirketi" list="sirketList" placeholder="Tıklayın / yazın — listeden seçin" autocomplete="off" />
+        <datalist id="sirketList"></datalist>
+      </div>
+      <div>
+        <label class="f">Hasar İhbar Tarihi <span class="req">*</span></label>
+        <input id="hasarIhbarTarihi" type="date" />
+      </div>
+      <div class="det">
+        <label class="f">Hasar İhbarını Yapan</label>
+        <input id="ihbariYapan" placeholder="Boşsa sigorta şirketi" />
+      </div>
+      <div class="det">
+        <label class="f">İhbarı Alan</label>
+        <input id="ihbariAlan" list="ekiperList" placeholder="Ör. Berfin Cingöz" />
+        <datalist id="ekiperList"><option>Arsal Güler</option><option>Berfin Cingöz</option><option>Emrah Güler</option></datalist>
+      </div>
+      <div class="det">
+        <label class="f">Poliçe No</label>
+        <input id="policeNo" placeholder="1468484739" />
+      </div>
+      <div class="det">
+        <label class="f">Poliçe Başlangıç</label>
+        <input id="policeBas" type="date" />
+      </div>
+      <div class="det">
+        <label class="f">Poliçe Bitiş</label>
+        <input id="policeBit" type="date" />
+      </div>
+      <div class="full">
+        <label class="f">Sigortalının Adı Soyadı / Ünvanı <span class="req">*</span></label>
+        <input id="sigortali" placeholder="DİCLE ELEKTRİK DAĞITIM A.Ş." />
+      </div>
+    </div>
+
+    <div class="full det" style="margin-top:14px">
+      <label class="f">Sigorta Bedeli</label>
+      <div class="bedel-block">
+        <div class="bedel-head"><span class="t">Kalem bazında bedel</span>
+          <div class="inline" style="flex:0"><label class="f" style="margin:0 6px 0 0">Para Birimi</label><select id="bedelPb" style="width:auto"><option>USD</option><option>TRY</option><option>EUR</option></select></div>
+        </div>
+        <div class="bedel-grid" id="bedelGrid"></div>
+      </div>
+    </div>
+
+    <div class="sec-title det">İletişim &amp; Hasar</div>
+    <div class="grid">
+      <div class="det">
+        <label class="f">Görüşülecek Kişinin Adı Soyadı</label>
+        <input id="gorusulecekAd" placeholder="Asım Aydın" />
+      </div>
+      <div class="det">
+        <label class="f">Telefon Numarası</label>
+        <input id="telefon" type="tel" inputmode="tel" placeholder="05__ ___ __ __" />
+      </div>
+      <div class="det">
+        <label class="f">E-mail adresi</label>
+        <input id="email" type="email" placeholder="ornek@firma.com" />
+      </div>
+      <div class="det">
+        <label class="f">İlgili Acente</label>
+        <input id="acente" placeholder="—" />
+      </div>
+      <div class="det">
+        <label class="f">Hasar Tarihi</label>
+        <input id="hasarTarihi" type="date" />
+      </div>
+      <div>
+        <label class="f">Hasar Sebebi</label>
+        <input id="hasarSebebi" placeholder="Kar ağırlığı nedeniyle çatı hasarı" />
+      </div>
+    </div>
+
+    <div class="sec-title det">Ekspertiz</div>
+    <div class="grid">
+      <div class="det">
+        <label class="f">Ekspertiz Tarihi</label>
+        <input id="ekspertizTarihi" type="date" />
+      </div>
+      <div class="det">
+        <label class="f">Rapor Gidiş Tarihi</label>
+        <input id="raporGidisTarihi" type="date" />
+      </div>
+      <div>
+        <label class="f">Ekspertiz Yeri — İl</label>
+        <select id="yerIl"></select>
+      </div>
+      <div>
+        <label class="f">Ekspertiz Yeri — İlçe</label>
+        <input id="yerIlce" list="ilceList" placeholder="İlçe" autocomplete="off" />
+        <datalist id="ilceList"></datalist>
+      </div>
+      <div class="full det">
+        <label class="f">Ekspertiz Yeri — Mahalle</label>
+        <input id="yerMahalle" list="mahalleList" placeholder="Mahalle" autocomplete="off" />
+        <datalist id="mahalleList"></datalist>
+        <div id="adresNote" class="banner info" style="margin-top:8px"><div>İl seçilince ilçe/mahalle listesi adres servisinden yüklenir (internet gerekir). Yüklenmezse elle yazabilirsiniz.</div></div>
+      </div>
+    </div>
+
+    <div class="sec-title det">Künye</div>
+    <div class="grid det">
+      <div>
+        <label class="f">Eksper Adı</label>
+        <input id="eksperAdi" list="ekiperList" placeholder="Arsal Güler" />
+      </div>
+      <div>
+        <label class="f">Rapor No <span style="font-weight:400;color:var(--muted)">— branşla otomatik, düzeltilebilir</span></label>
+        <input id="raporNo" placeholder="KAR-…/2026" />
+      </div>
+      <div>
+        <label class="f">Dosya No</label>
+        <input id="dosyaNo" placeholder="20102601923" />
+      </div>
+    </div>
+
+    <div class="sec-title det">Sayfa altına eklenecek (işaretleyin)</div>
+    <div class="opt-row det">
+      <label class="chk"><input type="checkbox" id="masrafChk"> Ekspertiz Masrafları</label>
+      <div class="amt dis" id="masrafAmt"><input id="masraf" inputmode="numeric" placeholder="0,00"><span class="cur">TL</span></div>
+    </div>
+    <div class="opt-row det">
+      <label class="chk"><input type="checkbox" id="ucretChk"> Ekspertiz Ücretleri</label>
+      <div class="amt dis" id="ucretAmt"><input id="ucret" inputmode="numeric" placeholder="0,00"><span class="cur">TL</span></div>
+    </div>
+    <div class="opt-row det">
+      <label class="chk"><input type="checkbox" id="tahminiChk"> Tahmini Hasar</label>
+      <div class="amt dis" id="tahminiAmt"><input id="tahmini" inputmode="numeric" placeholder="0,00"><span class="cur">TL</span></div>
+    </div>
+
+    <div class="sec-title">Ek Belgeler</div>
+    <div class="drop" id="belgeDrop">Poliçe PDF'i, sigortacı yazısı, e-posta eki — tıklayın veya sürükleyip bırakın</div>
+    <input type="file" id="belgeInput" multiple accept=".pdf,.doc,.docx,image/*,.msg,.eml" style="display:none" />
+    <div class="belge-list" id="belgeList"></div>
+    <div class="belge-note">Gerçek sistemde belgeler dosyanın Drive klasörüne (01_İhbar) otomatik yüklenir; prototipte yalnız liste tutulur.</div>
+
+    <div class="actionbar">
+      <button class="btn gold lg" id="saveBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4"/><rect x="8" y="13" width="8" height="4.5"/></svg> Kaydet ve Şablonu Göster</button>
+    </div>
+  </div>
+
+  <aside class="side">
+    <div class="card">
+      <h3>Dosya Künyesi</h3>
+      <div class="kv"><span class="k">Rapor No</span><span class="v rapor-no" id="sRaporNo">—</span></div>
+      <div class="kv"><span class="k">Dosya No</span><span class="v" id="sDosyaNo">—</span></div>
+      <div class="kv"><span class="k">Branş</span><span class="v" id="sKat">—</span></div>
+      <div class="kv"><span class="k">Sigortacı</span><span class="v" id="sSirket">—</span></div>
+      <div class="kv"><span class="k">Sigorta Bedeli</span><span class="v" id="sBedel">—</span></div>
+    </div>
+  </aside>
+</div>
+</div>
+
+<!-- ==================== ŞABLON ÖNİZLEME ==================== -->
+<div id="previewView">
+  <div class="pv-done"><div class="inner"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><div><b>Dosya açıldı:</b> <span class="no" id="dbDosya"></span> · Rapor No <span class="no" id="dbRapor"></span><span id="dbSure"></span></div></div></div>
+  <div class="pv-bar">
+    <div class="t">Kaydedildi — <b>çıktı şablonu</b>. Bu görünüm A4'e birebir basılır.</div>
+    <div style="display:flex;gap:10px">
+      <label class="btn" for="logoInput" style="cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5-4 4-2-2-4 4"/></svg> Logo Yükle</label>
+      <input type="file" id="logoInput" accept="image/*" style="display:none" />
+      <button class="btn" id="editBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1L18 8l-3-3L5 15z"/><path d="M14 6l3 3"/></svg> Düzenle</button>
+      <button class="btn primary lg" id="printBtn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M7 16h10v5H7z"/></svg> Yazdır</button>
+    </div>
+  </div>
+  <div class="paper">
+    <div id="printSheet">
+      <div class="p-top">
+        <div class="p-left">
+        <div class="p-logo" id="pLogo"></div>
+        <div class="p-firm">
+          <h4>MAKSİMA EKSPERLİK HİZM. LTD. ŞTİ.</h4>
+          <p>Yıldız Posta Cad. Akın Sitesi</p><p>No:10 K:4 d:51</p><p>Gayrettepe - İSTANBUL</p>
+          <p class="tel">Tel:&nbsp;&nbsp;(0212) 274 18 43/44</p><p>Fax:&nbsp;&nbsp;(0212) 274 18 50/19</p><p>e-mail: maksima@superonline.com</p>
+        </div>
+        </div>
+        <div class="p-meta">
+          <div class="mrow"><span class="mk">Eksper Adı</span><span>:</span><span class="mv" id="pEksper"></span></div>
+          <div class="mrow"><span class="mk">Rapor No</span><span>:</span><span class="mv" id="pRaporNo"></span></div>
+          <div class="mrow"><span class="mk">Dosya No</span><span>:</span><span class="mv" id="pDosyaNo"></span></div>
+        </div>
+      </div>
+      <div class="p-title">HASAR İHBAR FORMU</div>
+      <div class="p-brans" id="pBrans">—</div>
+
+      <div class="p-row"><span class="pl">Sigorta Şirketi</span><span class="pc">:</span><span class="pv" id="pSirket"></span></div>
+      <div class="p-row"><span class="pl">Hasar İhbar Tarihi</span><span class="pc">:</span><span class="pv" id="pIhbarTar"></span></div>
+      <div class="p-row"><span class="pl">Hasar İhbarını Yapan</span><span class="pc">:</span><span class="pv" id="pIhbarYapan"></span></div>
+      <div class="p-row"><span class="pl">İhbarı Alan</span><span class="pc">:</span><span class="pv" id="pIhbarAlan"></span></div>
+      <div class="p-row"><span class="pl">Poliçe No</span><span class="pc">:</span><span class="pv" id="pPoliceNo"></span></div>
+      <div class="p-row"><span class="pl">Poliçe Süresi</span><span class="pc">:</span><span class="pv" id="pPoliceSure"></span></div>
+      <div class="p-row"><span class="pl">Sigortalının Adı / Ünvanı</span><span class="pc">:</span><span class="pv" id="pSigortali"></span></div>
+      <div class="p-bedel"><span class="pl">Sigorta Bedeli</span><span style="padding-top:2px">:</span><div class="bg" id="pBedelGrid"></div></div>
+      <div class="p-row"><span class="pl">Görüşülecek Kişinin Adı</span><span class="pc">:</span><span class="pv" id="pGorusulecek"></span></div>
+      <div class="p-row"><span class="pl">Telefon Numarası</span><span class="pc">:</span><span class="pv" id="pTelefon"></span></div>
+      <div class="p-row"><span class="pl">E-mail Adresi</span><span class="pc">:</span><span class="pv" id="pEmail"></span></div>
+      <div class="p-row"><span class="pl">İlgili Acente</span><span class="pc">:</span><span class="pv" id="pAcente"></span></div>
+      <div class="p-row"><span class="pl">Hasar Tarihi</span><span class="pc">:</span><span class="pv" id="pHasarTar"></span></div>
+      <div class="p-row"><span class="pl">Hasar Sebebi</span><span class="pc">:</span><span class="pv" id="pHasarSebep"></span></div>
+      <div class="p-row"><span class="pl">Ekspertiz Tarihi</span><span class="pc">:</span><span class="pv" id="pEkspTar"></span></div>
+      <div class="p-row"><span class="pl">Ekspertiz Yeri</span><span class="pc">:</span><span class="pv" id="pEkspYer"></span></div>
+      <div class="p-row"><span class="pl">Rapor Gidiş Tarihi</span><span class="pc">:</span><span class="pv" id="pRaporGidis"></span></div>
+
+      <div class="p-extra hidden" id="pExtra"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= BRANŞ (parantezsiz) ================= */
+const SEED_CATS=[["CAM","Cam Kırılması",10],["DSU","Dahili Su",15],["DEP","Deprem ve Yanardağ Patlaması",30],["DOL","Dolu",10],["DUM","Duman",15],["EC","Elektronik Cihaz",20],["FIR","Fırtına",15],["GRV","Grev / Lokavt",20],["GES","Güneş Enerji Sistemleri",25],["HES","Hidrolik Enerji Sistemleri",25],["INS","İnşaat",25],["KAR","Kar Ağırlığı",15],["KHT","Kara ve Hava Taşıtları Çarpması",15],["KHH","Kargaşalık ve Halk Hareketleri",20],["MK","Makine Kırılması",25],["RES","Rüzgar Enerji Sistemleri",25],["SAN","Sanat Eseri",30],["SEL","Sel / Seylap",15],["TAR","Tarım",10],["TER","Terör ve Kötü Niyetli Hareketler",20],["YAN","Yangın",20]];
+/* ================= SİGORTA BEDELİ 9 sabit kalem ================= */
+const BEDEL_ITEMS=[{id:'bina',ad:'Bina'},{id:'elektronik',ad:'Elektronik Cihaz'},{id:'esya',ad:'Eşya'},{id:'makineK',ad:'Makine Kırılması'},{id:'cam',ad:'Cam Kırılması'},{id:'makinaT',ad:'Makina-Tesisat'},{id:'demirbas',ad:'Demirbaş'},{id:'emtea',ad:'Emtea'},{id:'diger',ad:'Diğer'}];
+/* ================= TÜRKİYE SİGORTA ŞİRKETLERİ ================= */
+const SIGORTA_SIRKETLERI=["Agesa Hayat ve Emeklilik","Aksigorta","Allianz Sigorta","Allianz Yaşam ve Emeklilik","Ana Sigorta","Anadolu Hayat Emeklilik","Anadolu Sigorta","Ankara Sigorta","Atlas Karşılıklı Sigorta","AXA Hayat ve Emeklilik","AXA Sigorta","Bereket Emeklilik","Bereket Sigorta","BNP Paribas Cardif","Chubb European Group","Cigna Sağlık Hayat ve Emeklilik","Coface Sigorta","Corpus Sigorta","Demir Sigorta","Doğa Sigorta","Ethica Sigorta","Euler Hermes Sigorta","Fibaemeklilik","Garanti BBVA Emeklilik","Groupama Hayat","Groupama Sigorta","Gulf Sigorta","Güneş Sigorta","Halk Hayat ve Emeklilik","HDI Sigorta","Işık Sigorta","Katılım Emeklilik","Koru Sigorta","Magdeburger Sigorta","Mapfre Sigorta","Mapfre Yaşam","MetLife Emeklilik ve Hayat","Milli Reasürans","Neova Katılım Sigorta","NN Hayat ve Emeklilik","Oryent Sigorta","Prive Sigorta","Quick Sigorta","Ray Sigorta","Sompo Sigorta","Şeker Sigorta","Türk Nippon Sigorta","Türk P ve I Sigorta","Türk Reasürans","Türkiye Hayat ve Emeklilik","Türkiye Sigorta","Unico Sigorta","Vakıf Emeklilik ve Hayat","Zurich Sigorta"];
+/* ================= 81 İL (offline garanti) ================= */
+const ILLER=["Adana","Adıyaman","Afyonkarahisar","Ağrı","Amasya","Ankara","Antalya","Artvin","Aydın","Balıkesir","Bilecik","Bingöl","Bitlis","Bolu","Burdur","Bursa","Çanakkale","Çankırı","Çorum","Denizli","Diyarbakır","Edirne","Elazığ","Erzincan","Erzurum","Eskişehir","Gaziantep","Giresun","Gümüşhane","Hakkari","Hatay","Isparta","Mersin","İstanbul","İzmir","Kars","Kastamonu","Kayseri","Kırklareli","Kırşehir","Kocaeli","Konya","Kütahya","Malatya","Manisa","Kahramanmaraş","Mardin","Muğla","Muş","Nevşehir","Niğde","Ordu","Rize","Sakarya","Samsun","Siirt","Sinop","Sivas","Tekirdağ","Tokat","Trabzon","Tunceli","Şanlıurfa","Uşak","Van","Yozgat","Zonguldak","Aksaray","Bayburt","Karaman","Kırıkkale","Batman","Şırnak","Bartın","Ardahan","Iğdır","Yalova","Karabük","Kilis","Osmaniye","Düzce"];
+
+const LS={cats:'mx_cats',catsV:'mx_cats_v',counters:'mx_counters',ihbariAlan:'mx_ihbari_alan',eksper:'mx_eksper',logo:'mx_logo',draft:'mx_draft',recentS:'mx_recent_sirket',mode:'mx_mode',metrics:'mx_metrics'};
+const store={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+let cats=store.get(LS.cats,SEED_CATS);
+/* seed v2 migrasyonu (2026-08-20): kayıtlı eski liste yenilenir, elle eklenen özel branşlar korunur */
+const SEED_V=2,OLD_SEED_KODS=['YAN','KAR','SEL','FIR','DEP','MK','EC','KK','IM','NAK','TAR','GES','SAN','HIR','CAM','SOR','DIG'];
+if(store.get(LS.catsV,1)!==SEED_V){
+  const custom=(Array.isArray(cats)?cats:[]).filter(c=>!OLD_SEED_KODS.includes(c[0])&&!SEED_CATS.some(sd=>sd[0]===c[0]));
+  cats=[...SEED_CATS,...custom];
+  store.set(LS.cats,cats);store.set(LS.catsV,SEED_V);
+}
+const catByKod=k=>cats.find(c=>c[0]===k);
+let bedel={},raporNoTouched=false;
+const $=id=>document.getElementById(id);
+const val=id=>($(id)?.value||'').trim();
+const todayISO=()=>new Date().toISOString().slice(0,10);
+const fmtDate=iso=>{if(!iso)return '';const[y,m,d]=iso.split('-');return `${d}.${m}.${y}`};
+const para=n=>(n||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const parseNum=s=>{const r=(s||'').replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,'');return r?parseFloat(r):0};
+
+/* ---- branş (parantezsiz, sadece ad) ---- */
+function fillBrans(sel){const cur=$('brans').value;$('brans').innerHTML='<option value="">— seçin —</option>'+cats.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');$('brans').value=sel??cur}
+function nextRaporNo(kod){const y=new Date().getFullYear();const c=store.get(LS.counters,{});return `${kod}-${(c[kod+'_'+y]||0)+1}/${y}`}
+function onBrans(){const c=catByKod(val('brans'));$('sKat').textContent=c?c[1]:'—';if(c&&!raporNoTouched){$('raporNo').value=nextRaporNo(c[0]);$('sRaporNo').textContent=$('raporNo').value}}
+
+/* ---- sigorta bedeli ---- */
+function renderBedel(){
+  $('bedelGrid').innerHTML=BEDEL_ITEMS.map(it=>`<div class="bedel-item"><label>${it.ad}</label><input data-b="${it.id}" inputmode="numeric" placeholder="0,00"/></div>`).join('');
+  $('bedelGrid').querySelectorAll('input').forEach(inp=>{
+    inp.oninput=e=>{bedel[e.target.dataset.b]=parseNum(e.target.value);sumBedel()};
+    inp.onblur=e=>{const v=parseNum(e.target.value);e.target.value=v?para(v):''};
+  });
+}
+function sumBedel(){const t=Object.values(bedel).reduce((a,b)=>a+(b||0),0);$('sBedel').textContent=t?`${para(t)} ${val('bedelPb')}`:'—'}
+
+/* ---- adres servisi (il embedded, ilçe/mahalle canlı + fallback) ---- */
+const API='https://turkiyeapi.dev/api/v1';
+let ilData=null;
+function fillIller(){$('yerIl').innerHTML='<option value="">— il —</option>'+ILLER.slice().sort((a,b)=>a.localeCompare(b,'tr')).map(i=>`<option>${i}</option>`).join('')}
+async function loadIlData(){try{const r=await fetch(API+'/provinces?fields=districts');const j=await r.json();ilData={};(j.data||[]).forEach(p=>ilData[p.name]=p.districts||[])}catch(e){ilData=false}}
+async function onIl(){
+  $('ilceList').innerHTML='';$('mahalleList').innerHTML='';$('yerIlce').value='';$('yerMahalle').value='';
+  const il=val('yerIl');if(!il)return;
+  if(ilData===null)await loadIlData();
+  if(ilData&&ilData[il]){$('ilceList').innerHTML=ilData[il].map(d=>`<option>${d.name}</option>`).join('')}
+}
+async function onIlce(){
+  $('mahalleList').innerHTML='';const il=val('yerIl'),ilce=val('yerIlce');if(!ilData||!ilData[il])return;
+  const d=ilData[il].find(x=>x.name.toLocaleLowerCase('tr')===ilce.toLocaleLowerCase('tr'));if(!d)return;
+  try{const r=await fetch(`${API}/neighborhoods?districtId=${d.id}&limit=2000`);const j=await r.json();$('mahalleList').innerHTML=(j.data||[]).map(n=>`<option>${n.name}</option>`).join('')}catch(e){}
+}
+
+/* ---- opsiyonel finansal checkbox ---- */
+function bindOpt(chk,amt){$(chk).onchange=()=>{$(amt).classList.toggle('dis',!$(chk).checked);if($(chk).checked)$(amt).querySelector('input').focus()}}
+
+/* ---- KAYDET → şablon ---- */
+function setErr(id,msg){const el=$(id);if(!el)return;el.classList.add('f-err');let m=el.parentElement.querySelector('.err-msg');if(!m){m=document.createElement('div');m.className='err-msg';el.parentElement.appendChild(m)}m.textContent=msg;const ev=el.tagName==='SELECT'?'change':'input';el.addEventListener(ev,()=>clrErr(id),{once:true})}
+function clrErr(id){const el=$(id);if(!el)return;el.classList.remove('f-err');const m=el.parentElement.querySelector('.err-msg');if(m)m.remove()}
+function validate(){
+  let first=null;
+  [['brans','Branş seçin.'],['sigortaSirketi','Sigorta şirketi girin.'],['sigortali','Sigortalı ünvanı girin.']].forEach(([id,msg])=>{if(!val(id)){setErr(id,msg);first=first||id}});
+  if(val('policeBas')&&val('policeBit')&&val('policeBit')<val('policeBas')){setErr('policeBit','Bitiş, başlangıçtan önce olamaz.');first=first||'policeBit'}
+  if(first){$(first).focus();$(first).scrollIntoView({block:'center',behavior:'smooth'});return false}
+  return true}
+function kaydet(){
+  if(!validate())return;
+  const kod=val('brans');
+  if(!raporNoTouched){const y=new Date().getFullYear();const cs=store.get(LS.counters,{});const ck=kod+'_'+y;cs[ck]=(cs[ck]||0)+1;store.set(LS.counters,cs);$('raporNo').value=`${kod}-${cs[ck]}/${y}`}
+  if(!val('dosyaNo')){const y=new Date().getFullYear();$('dosyaNo').value='HD-'+y+'-'+String((store.get(LS.counters,{})[kod+'_'+y]||1)).padStart(5,'0')}
+  store.set(LS.ihbariAlan,val('ihbariAlan'));store.set(LS.eksper,val('eksperAdi'));pushRecentSirket();clearDraft();
+  $('sRaporNo').textContent=val('raporNo');$('sDosyaNo').textContent=val('dosyaNo');
+  hazirlaPrint();fillDoneBar();
+  $('formView').style.display='none';$('previewView').style.display='block';window.scrollTo({top:0});
+}
+function hazirlaPrint(){
+  const c=catByKod(val('brans')),pb=val('bedelPb')||'USD';
+  $('pEksper').textContent=val('eksperAdi');$('pRaporNo').textContent=val('raporNo');$('pDosyaNo').textContent=val('dosyaNo');
+  $('pBrans').textContent=c?c[1]:'';
+  $('pSirket').textContent=val('sigortaSirketi');
+  $('pIhbarTar').textContent=fmtDate(val('hasarIhbarTarihi'));
+  $('pIhbarYapan').textContent=val('ihbariYapan')||val('sigortaSirketi');
+  $('pIhbarAlan').textContent=val('ihbariAlan');
+  $('pPoliceNo').textContent=val('policeNo');
+  $('pPoliceSure').textContent=(val('policeBas')||val('policeBit'))?`${fmtDate(val('policeBas'))} / ${fmtDate(val('policeBit'))}`:'';
+  $('pSigortali').textContent=val('sigortali');
+  $('pBedelGrid').innerHTML=BEDEL_ITEMS.map(it=>`<div class="bi"><span class="bl">${it.ad}</span><span class="bc">:</span><span class="bv">${para(bedel[it.id]||0)}</span><span class="bu">${pb}</span></div>`).join('');
+  $('pGorusulecek').textContent=val('gorusulecekAd');
+  $('pTelefon').textContent=val('telefon');
+  $('pEmail').textContent=val('email');
+  $('pAcente').textContent=val('acente');
+  $('pHasarTar').textContent=fmtDate(val('hasarTarihi'));
+  $('pHasarSebep').textContent=val('hasarSebebi');
+  $('pEkspTar').textContent=fmtDate(val('ekspertizTarihi'));
+  const yer=[val('yerMahalle'),val('yerIlce'),val('yerIl')].filter(Boolean);
+  $('pEkspYer').textContent=yer.length?`${val('yerMahalle')?val('yerMahalle')+' Mah. ':''}${val('yerIlce')||''}${(val('yerIlce')&&val('yerIl'))?' / ':''}${val('yerIl')||''}`:'';
+  $('pRaporGidis').textContent=fmtDate(val('raporGidisTarihi'));
+  // opsiyonel finansal
+  const ex=[];
+  if($('masrafChk').checked)ex.push(['Ekspertiz Masrafları',para(parseNum(val('masraf')))]);
+  if($('ucretChk').checked)ex.push(['Ekspertiz Ücretleri',para(parseNum(val('ucret')))]);
+  if($('tahminiChk').checked)ex.push(['Tahmini Hasar',para(parseNum(val('tahmini')))]);
+  $('pExtra').classList.toggle('hidden',!ex.length);
+  $('pExtra').innerHTML=ex.map(([k,v])=>`<div class="p-row"><span class="pl">${k}</span><span class="pc">:</span><span class="pv">${v}&nbsp;&nbsp;&nbsp;&nbsp;TL</span></div>`).join('');
+}
+
+/* ---- Paket 1: taslak (autosave) ---- */
+const DRAFT_IDS=['brans','sigortaSirketi','hasarIhbarTarihi','ihbariYapan','ihbariAlan','policeNo','policeBas','policeBit','sigortali','bedelPb','gorusulecekAd','telefon','email','acente','hasarTarihi','hasarSebebi','ekspertizTarihi','raporGidisTarihi','yerIl','yerIlce','yerMahalle','eksperAdi','raporNo','dosyaNo','masraf','ucret','tahmini'];
+const CHK_IDS=['masrafChk','ucretChk','tahminiChk'];
+let belgeler=[],draftTimer=null;
+function saveDraft(){
+  const d={ts:Date.now(),f:{},chk:{},bedel:{...bedel},belge:belgeler.map(b=>({n:b.n,s:b.s}))};
+  DRAFT_IDS.forEach(id=>d.f[id]=val(id));CHK_IDS.forEach(id=>d.chk[id]=$(id).checked);
+  if(d.f.sigortaSirketi||d.f.sigortali||d.f.policeNo||d.f.hasarSebebi||belgeler.length)store.set(LS.draft,d)}
+function queueDraft(){clearTimeout(draftTimer);draftTimer=setTimeout(saveDraft,350)}
+function clearDraft(){localStorage.removeItem(LS.draft)}
+function restoreDraft(){
+  const d=store.get(LS.draft,null);if(!d)return;
+  DRAFT_IDS.forEach(id=>{if(d.f[id]!==undefined&&$(id))$(id).value=d.f[id]});
+  CHK_IDS.forEach(id=>{if($(id)){$(id).checked=!!d.chk[id];if($(id).onchange)$(id).onchange()}});
+  bedel={...(d.bedel||{})};
+  $('bedelGrid').querySelectorAll('input').forEach(inp=>{const v=bedel[inp.dataset.b];inp.value=v?para(v):''});
+  belgeler=(d.belge||[]).map(b=>({n:b.n,s:b.s}));renderBelge();
+  if(d.f.raporNo)raporNoTouched=true;
+  if(val('brans')){const c=catByKod(val('brans'));$('sKat').textContent=c?c[1]:'—'}
+  $('sRaporNo').textContent=val('raporNo')||'—';$('sDosyaNo').textContent=val('dosyaNo')||'—';$('sSirket').textContent=val('sigortaSirketi')||'—';
+  sumBedel();if(val('yerIl'))onIl()}
+function initDraft(){
+  const d=store.get(LS.draft,null);
+  if(d&&d.f){const t=new Date(d.ts);$('draftInfo').textContent=' '+(d.f.sigortali||d.f.sigortaSirketi||'')+' · '+t.toLocaleDateString('tr-TR')+' '+t.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});
+    $('draftBanner').classList.remove('hidden');
+    $('draftResume').onclick=()=>{restoreDraft();$('draftBanner').classList.add('hidden')};
+    $('draftDiscard').onclick=()=>{clearDraft();$('draftBanner').classList.add('hidden')}}
+  $('formView').addEventListener('input',queueDraft);
+  $('formView').addEventListener('change',queueDraft)}
+
+/* ---- Paket 1: ek belgeler ---- */
+function renderBelge(){
+  $('belgeList').innerHTML=belgeler.map((b,i)=>`<div class="belge-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><span class="nm">${b.n}</span><span class="sz">${b.s}</span><button type="button" title="Kaldır" onclick="belgeSil(${i})">×</button></div>`).join('')}
+function belgeSil(i){belgeler.splice(i,1);renderBelge();queueDraft()}
+function addBelgeFiles(fs){[...fs].forEach(f=>{belgeler.push({n:f.name,s:f.size>1048576?(f.size/1048576).toFixed(1)+' MB':Math.max(1,Math.round(f.size/1024))+' KB'})});renderBelge();queueDraft()}
+function initBelge(){
+  $('belgeDrop').onclick=()=>$('belgeInput').click();
+  $('belgeInput').onchange=e=>{addBelgeFiles(e.target.files);e.target.value=''};
+  ['dragover','dragenter'].forEach(ev=>$('belgeDrop').addEventListener(ev,e=>{e.preventDefault();$('belgeDrop').classList.add('over')}));
+  ['dragleave','drop'].forEach(ev=>$('belgeDrop').addEventListener(ev,e=>{e.preventDefault();$('belgeDrop').classList.remove('over')}));
+  $('belgeDrop').addEventListener('drop',e=>addBelgeFiles(e.dataTransfer.files))}
+
+/* ---- Paket 1: klavye akisi ---- */
+function initKeys(){
+  document.addEventListener('keydown',e=>{
+    if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){if($('formView').style.display!=='none'){e.preventDefault();kaydet()}return}
+    if(e.key==='Escape'&&$('previewView').style.display==='block'){$('editBtn').click();return}
+    if(e.key==='Enter'&&e.target.tagName==='INPUT'&&e.target.type!=='checkbox'&&!e.target.closest('#previewView')){
+      e.preventDefault();
+      const els=[...document.querySelectorAll('#formView input:not([type=file]):not([type=checkbox]),#formView select')].filter(x=>!x.disabled&&x.offsetParent);
+      const i=els.indexOf(e.target);
+      if(i>-1&&i<els.length-1)els[i+1].focus();else $('saveBtn').focus()}})}
+
+/* ---- Paket 1: telefon maskesi + son kullanilan sigortaci ---- */
+function initPhone(){$('telefon').addEventListener('blur',e=>{const d=e.target.value.replace(/\D/g,'');if(d.length===11&&d.startsWith('0'))e.target.value=`${d.slice(0,4)} ${d.slice(4,7)} ${d.slice(7,9)} ${d.slice(9)}`;else if(d.length===10)e.target.value=`0${d.slice(0,3)} ${d.slice(3,6)} ${d.slice(6,8)} ${d.slice(8)}`})}
+function fillSirketList(){const rec=store.get(LS.recentS,[]);$('sirketList').innerHTML=[...rec,...SIGORTA_SIRKETLERI.filter(s=>!rec.includes(s))].map(s=>`<option>${s}</option>`).join('')}
+function pushRecentSirket(){const s=val('sigortaSirketi');if(!s)return;let rec=store.get(LS.recentS,[]);rec=[s,...rec.filter(x=>x!==s)].slice(0,5);store.set(LS.recentS,rec);fillSirketList()}
+
+/* ---- Paket 2: mod + süre + tören ---- */
+function applyMode(m){store.set(LS.mode,m);$('formView').classList.toggle('quick',m==='quick');$('modeQuick').classList.toggle('on',m==='quick');$('modeDetay').classList.toggle('on',m!=='quick')}
+function initMode(){$('modeQuick').onclick=()=>applyMode('quick');$('modeDetay').onclick=()=>applyMode('detay');applyMode(store.get(LS.mode,'detay'))}
+let girisT0=null;
+function initTimer(){$('formView').addEventListener('input',()=>{if(!girisT0)girisT0=Date.now()})}
+function sureText(s){const m=Math.floor(s/60),sn=Math.round(s%60);return m?`${m} dk ${sn} sn`:`${sn} sn`}
+function fillDoneBar(){
+  $('dbDosya').textContent=val('dosyaNo');$('dbRapor').textContent=val('raporNo');
+  let ek='';
+  if(girisT0){const s=(Date.now()-girisT0)/1000;ek=' · giriş '+sureText(s)+' sürdü';
+    const mt=store.get(LS.metrics,[]);mt.push({ts:Date.now(),sn:Math.round(s),mod:$('formView').classList.contains('quick')?'hizli':'detay'});store.set(LS.metrics,mt.slice(-200))}
+  $('dbSure').textContent=ek;girisT0=null}
+
+/* ---- logo ---- */
+function applyLogo(){const d=store.get(LS.logo,'');$('pLogo').innerHTML=d?`<img src="${d}" alt="logo">`:''}
+
+/* ================= INIT ================= */
+function init(){
+  if(new URLSearchParams(location.search).get('embed')==='1'){const h=document.querySelector('.app-header');if(h)h.style.display='none';document.querySelector('.wrap').style.marginTop='16px';}
+  fillBrans();
+  applyLogo();
+  fillSirketList();
+  fillIller();
+  $('hasarIhbarTarihi').value=todayISO();
+  $('ihbariAlan').value=store.get(LS.ihbariAlan,'')||'';
+  $('eksperAdi').value=store.get(LS.eksper,'')||'';
+  BEDEL_ITEMS.forEach(it=>bedel[it.id]=0);renderBedel();
+
+  $('brans').onchange=()=>{raporNoTouched=false;onBrans()};
+  $('raporNo').oninput=()=>{raporNoTouched=true;$('sRaporNo').textContent=val('raporNo')||'—'};
+  $('dosyaNo').oninput=()=>$('sDosyaNo').textContent=val('dosyaNo')||'—';
+  $('sigortaSirketi').oninput=()=>$('sSirket').textContent=val('sigortaSirketi')||'—';
+  $('bedelPb').onchange=sumBedel;
+  $('yerIl').onchange=onIl;$('yerIlce').onchange=onIlce;$('yerIlce').onblur=onIlce;
+  ['masraf','ucret','tahmini'].forEach(id=>$(id).onblur=e=>{const v=parseNum(e.target.value);e.target.value=v?para(v):''});
+  bindOpt('masrafChk','masrafAmt');bindOpt('ucretChk','ucretAmt');bindOpt('tahminiChk','tahminiAmt');
+
+  $('addCatBtn').onclick=()=>{const ad=prompt('Yeni branş adı:');if(!ad)return;const kod=(prompt('Kısa kod (ör. YAN):','')||'').toUpperCase().trim();if(!kod){alert('Kod gerekli.');return}if(/traf|kasko/i.test(ad)){alert('Trafik/kasko eklenemez.');return}if(catByKod(kod)){alert('Bu kod var.');return}const sla=+(prompt('SLA (gün):','20')||20);cats.push([kod,ad,sla]);store.set(LS.cats,cats);fillBrans(kod);onBrans()};
+
+  $('saveBtn').onclick=kaydet;
+  $('editBtn').onclick=()=>{$('previewView').style.display='none';$('formView').style.display='block';window.scrollTo({top:0})};
+  $('printBtn').onclick=()=>window.print();
+  $('logoInput').onchange=e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{store.set(LS.logo,rd.result);applyLogo()};rd.readAsDataURL(f)};
+
+  initDraft();initBelge();initKeys();initPhone();initMode();initTimer();
+  // adres verisini arka planda ısıt (varsa)
+  loadIlData();
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
