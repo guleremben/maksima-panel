@@ -246,6 +246,44 @@
   .h-link:hover{text-decoration:underline}
   .h-p{font-size:15px;font-weight:700}
 
+  /* İK v2: ekip duvarı + ritim + sakin lüks animasyon */
+  .ekip-wall{display:flex;flex-wrap:wrap;gap:10px}
+  .ekip-chip{display:flex;align-items:center;gap:9px;padding:7px 13px 7px 8px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:var(--card);transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease}
+  .ekip-chip:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(30,41,59,.09)}
+  .ekip-chip:focus-visible{outline:2px solid var(--mintd,#3aa9a7);outline-offset:2px}
+  .ekip-chip.izinli{opacity:.5}
+  .ekip-chip.alarm{border-color:var(--amber)}
+  .ekip-chip .ec-t{display:flex;flex-direction:column;line-height:1.25}
+  .ekip-chip .ec-n{font-size:12px;font-weight:600;color:var(--ink)}
+  .ekip-chip .ec-s{font-size:10px;color:var(--muted)}
+  .ekip-chip.alarm .ec-s{color:hsl(30 62% 42%)}
+  .ritim{display:flex;flex-direction:column}
+  .ritim-row{display:flex;align-items:center;gap:12px;padding:9px 2px;border-bottom:1px dashed var(--line)}
+  .ritim-row:last-child{border-bottom:none}
+  .ritim-d{min-width:50px;text-align:center;border:1px solid var(--line);border-radius:9px;padding:3px 5px;flex:none}
+  .ritim-d b{display:block;font-size:14.5px;color:var(--ink);line-height:1.15}
+  .ritim-d span{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .ritim-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none}
+  .ritim-b{flex:1;font-size:12.5px;color:var(--ink);min-width:0}
+  .ritim-b .sub{font-size:11px;color:var(--muted)}
+  .gunaydin .gd-l{text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+  section[data-view="ik"].on .ik-stagger>*{opacity:0;transform:translateY(10px);animation:ikIn .5s cubic-bezier(.22,.9,.35,1) forwards}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(1){animation-delay:.02s}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(2){animation-delay:.09s}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(3){animation-delay:.16s}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(4){animation-delay:.23s}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(5){animation-delay:.30s}
+  section[data-view="ik"].on .ik-stagger>*:nth-child(6){animation-delay:.37s}
+  @keyframes ikIn{to{opacity:1;transform:none}}
+  .appr{transition:opacity .3s ease,transform .3s ease,background .2s ease}
+  .appr.ok-flash{background:hsl(160 45% 93%)}
+  .appr.no-flash{background:hsl(0 62% 96%)}
+  .appr.out{opacity:0;transform:translateX(14px)}
+  #ikCapRows .bf{transition:width .65s cubic-bezier(.22,.9,.35,1)}
+  @media (prefers-reduced-motion: reduce){
+    section[data-view="ik"].on .ik-stagger>*{animation:none;opacity:1;transform:none}
+    .ekip-chip,.appr,#ikCapRows .bf{transition:none}
+  }
   /* çalışan kartı + karne */
   .karne-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
   .karne-grid>div{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
@@ -544,6 +582,9 @@
   <g id="ic-user"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></g>
   <g id="ic-receipt"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h5"/></g>
   <g id="ic-bars"><path d="M5 21V11M12 21V4M19 21V8"/></g>
+  <g id="ic-gift"><path d="M20 12v9H4v-9"/><path d="M2 7h20v5H2z"/><path d="M12 7v14"/><path d="M12 7s-1-4-4-4-3 4 0 4"/><path d="M12 7s1-4 4-4 3 4 0 4"/></g>
+  <g id="ic-flag"><path d="M4 22V3"/><path d="M4 4h14l-2 4 2 4H4"/></g>
+  <g id="ic-cal"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></g>
   <g id="ic-wallet"><path d="M20 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2v-2"/><path d="M21 10h-5a2 2 0 0 0 0 4h5z"/></g>
   <g id="ic-usercheck"><circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 12.5-2.3"/><path d="M16 13.5l2 2 4-4"/></g>
   <g id="ic-trend"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></g>
@@ -680,7 +721,7 @@
         <iframe class="embed" id="ihbarFrame" title="İhbar Girişi"></iframe>
       </section>
 
-      <!-- ---- İK PANELİ ---- -->
+      <!-- ---- İK PANELİ (v2: Bugün + Ekip Duvarı + Ritim) ---- -->
       <section class="view" data-view="ik">
         <div class="mode-toggle">
           <button class="on" id="ikEmp" onclick="switchIK('emp')">Çalışan Görünümü</button>
@@ -688,94 +729,49 @@
         </div>
 
         <!-- ÇALIŞAN -->
-        <div id="ikEmpView" class="ik-grid">
-          <div class="ik-col">
+        <div id="ikEmpView" class="ik-stagger">
+          <div class="two-col">
             <div class="block">
+              <h3>Benim Durumum</h3>
               <div class="prof-top"><div class="avatar">AG</div><div><div class="prof-name">Arsal Güler</div><div class="prof-role">Eksper · Ekspertiz</div></div></div>
               <div class="prof-row"><span class="k">Yöneticisi</span><span>Emrah Güler</span></div>
-              <div class="prof-row"><span class="k">İşe Başlama</span><span>10 Ara 2022</span></div>
               <div class="prof-row"><span class="k">Levha / Lisans</span><span>SEDDK · geçerli</span></div>
               <div class="prof-row"><span class="k">Branş Yetkisi</span><span>Yangın, Kar, GES</span></div>
-            </div>
-            <div class="block">
-              <h3>Çalışan Dağılımı</h3>
-              <div class="donut" style="background:conic-gradient(#4e79a7 0 37.5%,#e15759 37.5% 56.25%,#59a14f 56.25% 68.75%,#f28e2b 68.75% 81.25%,#edc948 81.25% 87.5%,#76b7b2 87.5% 93.75%,#b07aa1 93.75% 100%)"><div class="dc"><div><b>16</b><span>çalışan</span></div></div></div>
-              <div class="dept-leg">
-                <div><i style="background:#4e79a7"></i>Ekspertiz<span class="n">6</span></div>
-                <div><i style="background:#e15759"></i>Raportör<span class="n">3</span></div>
-                <div><i style="background:#59a14f"></i>Ofis<span class="n">2</span></div>
-                <div><i style="background:#f28e2b"></i>Finans<span class="n">2</span></div>
-                <div><i style="background:#edc948"></i>Yönetim<span class="n">1</span></div>
-                <div><i style="background:#76b7b2"></i>Saha<span class="n">1</span></div>
-                <div><i style="background:#b07aa1"></i>İç Hizmet<span class="n">1</span></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="ik-col">
-            <div class="block">
-              <h3>İzin Bilgilerim</h3>
-              <div class="leave-sub">31 Ara 2026 tarihine kadar mevcut</div>
+              <div class="leave-sub" style="margin-top:14px">Yıllık izin · 31 Ara 2026 tarihine kadar mevcut</div>
               <div class="leave-big">15 gün</div>
               <div class="seg"><span style="width:50%;background:var(--emerald)"></span><span style="width:10%;background:var(--gold)"></span><span style="width:40%;background:var(--rose)"></span></div>
               <div class="seg-leg"><span><i style="background:var(--emerald)"></i>Kullanılabilir 15</span><span><i style="background:var(--gold)"></i>İleri tarihli 3</span><span><i style="background:var(--rose)"></i>Kullanılan 12</span></div>
+              <div class="row-item"><span class="ri-ic wait"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-clock"/></svg></span><div class="ri-body"><div class="ri-t">Yıllık İzin</div><div class="ri-d">Onay bekliyor · 1–4 Eyl 2026</div></div><div class="ri-r">4 gün</div></div>
               <div class="row-item"><span class="ri-ic ok"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span><div class="ri-body"><div class="ri-t">Yıllık İzin</div><div class="ri-d">Onaylı · 4 Şub 2026</div></div><div class="ri-r">1 gün</div></div>
               <div class="row-item"><span class="ri-ic ok"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-check"/></svg></span><div class="ri-body"><div class="ri-t">Hastalık İzni</div><div class="ri-d">Onaylı · 24 Mar 2026</div></div><div class="ri-r">1 gün</div></div>
-              <div class="row-item"><span class="ri-ic wait"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-clock"/></svg></span><div class="ri-body"><div class="ri-t">Yıllık İzin</div><div class="ri-d">Onay bekliyor · 1–4 Eyl 2026</div></div><div class="ri-r">4 gün</div></div>
-              <div class="row-item"><span class="ri-ic no"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-x"/></svg></span><div class="ri-body"><div class="ri-t">Mazeret İzni</div><div class="ri-d">Reddedildi · 4 Şub 2026</div></div><div class="ri-r">0,5 gün</div></div>
               <div style="margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);font-size:11px;color:var(--muted)">İzin talebi ve bordro görüntüleme telefondan da yapılır: Frappe HR mobil uygulaması (self-servis).</div>
             </div>
             <div class="block">
-              <h3>Yaklaşan Doğum Günleri</h3>
-              <div class="lp"><span class="avatar sm">EK</span><span class="nm">Esma Keseroğlu</span><span class="rt">18 Kas</span></div>
-              <div class="lp"><span class="avatar sm">HŞ</span><span class="nm">Hasan Şahin</span><span class="rt">9 Ara</span></div>
-              <div class="lp"><span class="avatar sm">ZK</span><span class="nm">Zeynep Kaya</span><span class="rt">27 Ara</span></div>
-            </div>
-          </div>
-
-          <div class="ik-col">
-            <div class="block">
-              <h3>Yaklaşan İzinler</h3>
-              <div class="lp"><span class="avatar sm">ZK</span><span class="nm">Zeynep Kaya</span><span class="rt">4g · Bugün (dönüş 22 Ağu)</span></div>
-              <div class="lp"><span class="avatar sm">AG</span><span class="nm">Arsal Güler</span><span class="rt">4g · 1 Eyl · onay bekliyor</span></div>
-              <div class="lp"><span class="avatar sm">MA</span><span class="nm">Mehmetcan Aydın</span><span class="rt">2g · 23 Kas · onay bekliyor</span></div>
-            </div>
-            <div class="block">
-              <h3>Resmi Tatiller</h3>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">Zafer Bayramı</div></div><div class="ri-r">30 Ağu</div></div>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">Cumhuriyet Bayramı</div></div><div class="ri-r">29 Eki</div></div>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">Yılbaşı</div></div><div class="ri-r">1 Oca 2027</div></div>
-            </div>
-            <div class="block">
-              <h3>Etkinlik Takvimi</h3>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">KVKK Eğitimi</div></div><div class="ri-r">12 Eyl</div></div>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">Saha Güvenliği Tatbikatı</div></div><div class="ri-r">3 Eki</div></div>
-              <div class="row-item"><div class="ri-body"><div class="ri-t">Yıl Sonu Toplantısı</div></div><div class="ri-r">28 Ara</div></div>
+              <h3>Şirket Ritmi</h3>
+              <div class="aging-lab" style="margin-bottom:6px">İzinler, doğum günleri, tatiller ve etkinlikler — tek akışta</div>
+              <div class="ritim" id="ikRitimEmp"></div>
             </div>
           </div>
         </div>
 
         <!-- ADMIN -->
-        <div id="ikAdmView" style="display:none">
-          <div class="kpis" style="grid-template-columns:repeat(4,1fr)">
-            <div class="kpi"><div class="lab"><span class="d" style="background:var(--navy)"></span> Toplam Çalışan</div><div class="val">16</div><div class="sub">7 departman · 6 eksper</div></div>
-            <div class="kpi"><div class="lab"><span class="d" style="background:var(--emerald)"></span> Bugün İzinde</div><div class="val" id="ikKpiIzinde">0</div><div class="sub" id="ikKpiIzindeSub">kimse yok</div></div>
-            <div class="kpi"><div class="lab"><span class="d" style="background:var(--amber)"></span> Onay Bekleyen İzin</div><div class="val" id="ikKpiBekleyen">0</div><div class="sub">aşağıdaki kuyruktan onaylanır</div></div>
-            <div class="kpi" style="cursor:pointer" onclick="go('personel')" title="Personel — levha takibi"><div class="lab"><span class="d" style="background:var(--gold)"></span> Levha Alarmı</div><div class="val">1</div><div class="sub">Emre Doğru · 24 gün kaldı</div></div>
+        <div id="ikAdmView" style="display:none" class="ik-stagger">
+          <div class="gunaydin" id="ikBugun"></div>
+
+          <div class="block">
+            <div class="sec-h" style="margin:0 0 12px"><h2 style="margin:0">Ekip</h2><span style="font-size:11px;color:var(--muted)">çipe tıkla → çalışan kartı + karne</span></div>
+            <div class="ekip-wall" id="ikEkip"></div>
           </div>
 
-          <div class="sec-h"><h2>İK Modülleri</h2></div>
-          <div class="feat-grid">
-            <button class="feat" onclick="go('personel')"><span class="feat-ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg></span><div><div class="feat-t">Personel</div><div class="feat-d">Çalışan bilgileri, özlük dosyası ve otomatik karne</div></div></button>
-            <button class="feat" onclick="go('izin')"><span class="feat-ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg></span><div><div class="feat-t">İzin Yönetimi</div><div class="feat-d">İzinleri uzaktan takip edin, yönetin ve onaylayın</div></div></button>
-            <button class="feat" onclick="go('bordro')"><span class="feat-ic"><svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-receipt"/></svg></span><div><div class="feat-t">Bordro &amp; Maliyet</div><div class="feat-d">Bordro arşivi + personel maliyeti — hesap mali müşavirde</div></div></button>
+          <div class="two-col">
+            <div class="block"><h3>Onay Bekleyen İzinler</h3><div id="ikApprList" style="margin-top:4px"></div></div>
+            <div class="block"><h3>Eksper Kapasitesi</h3><div class="aging-lab" style="margin-bottom:10px">Eksper başına açık dosya — atama kararının girdisi · satıra tıkla → Dosyalar</div><div id="ikCapRows"></div></div>
           </div>
 
-          <div class="sec-h"><h2>Eksper Kapasitesi</h2></div>
-          <div class="block"><div class="aging-lab" style="margin-bottom:10px">Eksper başına açık dosya — atama kararının girdisi · satıra tıklayınca Dosyalar o ekspere süzülür · izindeki eksper soluk görünür</div><div id="ikCapRows"></div></div>
-
-          <div class="sec-h"><h2>Onay Bekleyen İzinler</h2></div>
-          <div class="block" id="ikApprList"></div>
+          <div class="block">
+            <div class="sec-h" style="margin:0 0 6px"><h2 style="margin:0">Şirket Ritmi</h2><span style="font-size:11px;color:var(--muted)">önümüzdeki günler — izin · doğum günü · tatil · etkinlik</span></div>
+            <div class="ritim" id="ikRitim"></div>
+          </div>
         </div>
       </section>
 
@@ -1220,6 +1216,9 @@ function switchIK(r){
   document.getElementById('ikAdmView').style.display=r==='adm'?'':'none';
   document.getElementById('ikEmp').classList.toggle('on',r==='emp');
   document.getElementById('ikAdm').classList.toggle('on',r==='adm');
+  const v=document.getElementById(r==='emp'?'ikEmpView':'ikAdmView');
+  v.classList.remove('ik-stagger');void v.offsetWidth;v.classList.add('ik-stagger');
+  if(typeof renderIkCap==='function')renderIkCap();
 }
 function switchMode(m){
   document.getElementById('modePaket').style.display=m==='paket'?'':'none';
@@ -1607,19 +1606,31 @@ function renderLeaves(){
 }
 function leaveAct(id,act){
   const l=LEAVES.find(x=>x.id===id); if(!l)return;
-  l.durum=act==='onay'?'onayli':'reddedildi';
-  renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis();
-  dqToast(`${l.ad} · ${l.tur} — ${act==='onay'?'onaylandı':'reddedildi'}.`);
+  const fin=()=>{
+    l.durum=act==='onay'?'onayli':'reddedildi';
+    renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis(); renderIkEkip(); renderRitim(); renderIkCap();
+    dqToast(`${l.ad} · ${l.tur} — ${act==='onay'?'onaylandı':'reddedildi'}.`);
+  };
+  const row=document.querySelector('#ikApprList .appr[data-lid="'+id+'"]');
+  if(row){row.classList.add(act==='onay'?'ok-flash':'no-flash');requestAnimationFrame(()=>row.classList.add('out'));setTimeout(fin,330);}
+  else fin();
 }
 function goLeaves(ad){go('izin');el('lqSearch').value=ad;LF.q=ad.toLocaleLowerCase('tr');
   LF.dur='hepsi';[...el('lqDurum').children].forEach(b=>b.classList.toggle('on',b.dataset.d==='hepsi'));renderLeaves();}
 
 /* ---------- İK PANELİ (yönetici) — canlı bloklar ---------- */
-function updateIkKpis(){
+function updateIkKpis(){ /* "Bugün" bandı — canlı veriden insan dili */
   const izinli=STAFF.filter(s=>izindeMi(s.ad));
-  el('ikKpiIzinde').textContent=izinli.length;
-  el('ikKpiIzindeSub').textContent=izinli.length?izinli.map(s=>s.ad).join(', '):'kimse yok';
-  el('ikKpiBekleyen').textContent=LEAVES.filter(l=>l.durum==='bekliyor').length;
+  const bekleyen=LEAVES.filter(l=>l.durum==='bekliyor').length;
+  const iste=STAFF.length-izinli.length;
+  const izinliTxt=izinli.length
+    ? izinli.map(s=>`<b class="gd-l" onclick="openKarne('${s.ad}')">${s.ad}</b>`).join(', ')+' izinde'
+    : 'herkes işte';
+  el('ikBugun').innerHTML=
+    `Bugün <b>${iste} kişi işte</b>, ${izinliTxt}. `+
+    (bekleyen?`<b class="gd-l" onclick="document.getElementById('ikApprList').scrollIntoView({behavior:'smooth',block:'center'})">${bekleyen} izin</b> onayınızı bekliyor. `
+             :'Onay kuyruğu temiz. ')+
+    `<b class="gd-l" onclick="openKarne('Emre Doğru')">Emre Doğru</b>'nun levhası 24 gün sonra bitiyor.`;
 }
 function renderIkCap(){
   const eks=STAFF.filter(s=>s.dep==='Ekspertiz');
@@ -1629,15 +1640,18 @@ function renderIkCap(){
     const iz=izindeMi(s.ad);
     return `<div class="bar-row" style="cursor:pointer${iz?';opacity:.55':''}" onclick="capGo('${s.ad}')" title="Dosyalar — ${s.ad}">
       <span class="bl">${s.ad}${iz?' · izinde':''}</span>
-      <span class="bt"><span class="bf" style="width:${Math.round(n/max*100)}%"></span></span><span class="bv">${n}</span></div>`;
+      <span class="bt"><span class="bf" style="width:0%" data-w="${Math.round(n/max*100)}"></span></span><span class="bv">${n}</span></div>`;
   }).join('');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    el('ikCapRows').querySelectorAll('.bf').forEach(b=>{b.style.width=b.dataset.w+'%';});
+  }));
 }
 function capGo(ad){go('dosyalar');F.eks=ad;F.durum='acik';el('dqEksper').value=ad;
   [...el('dqDurum').children].forEach(b=>b.classList.toggle('on',b.dataset.d==='acik'));renderCases();}
 function renderIkAppr(){
   const wait=LEAVES.filter(l=>l.durum==='bekliyor');
   el('ikApprList').innerHTML=wait.length?wait.map(l=>`
-    <div class="appr"><span class="avatar sm">${l.ini}</span>
+    <div class="appr" data-lid="${l.id}"><span class="avatar sm">${l.ini}</span>
       <div class="ab"><div class="t">${l.ad} · ${l.tur}</div><div class="d">${l.gun.toLocaleString('tr-TR')} gün · ${dRange(l.bas,l.bit)}</div></div>
       <div class="btns"><button class="okb" onclick="leaveAct('${l.id}','onay')">Onayla</button><button class="nob" onclick="leaveAct('${l.id}','ret')">Reddet</button></div>
     </div>`).join(''):'<div style="font-size:12.5px;color:var(--muted);padding:6px 2px">Bekleyen izin talebi yok — kuyruk temiz.</div>';
@@ -1727,8 +1741,53 @@ function renderBordro(){
       return `<tr><td><b>${ad}</b></td><td>₺${m} B</td><td>${n}</td><td>${n?('₺'+Math.round(m/n)+' B'):'—'}</td></tr>`;}).join('')+'</tbody></table>';
 }
 
+/* ---------- EKİP DUVARI ---------- */
+const DEPT_RENK={'Ekspertiz':'#4e79a7','Raportör':'#e15759','Ofis':'#59a14f','Finans':'#f28e2b','Yönetim':'#edc948','Saha':'#76b7b2','İç Hizmet':'#b07aa1'};
+function renderIkEkip(){
+  el('ikEkip').innerHTML=STAFF.map(st=>{
+    const iz=izindeMi(st.ad);
+    const alt=iz?'izinde':(st.uyari?'levha: 24 gün':st.dep);
+    return `<div class="ekip-chip${iz?' izinli':''}${st.uyari?' alarm':''}" tabindex="0" onclick="openKarne('${st.ad}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openKarne('${st.ad}')}" title="${st.ad} · ${st.gorev}${iz?' · izinde':''}">
+      <span class="avatar sm" style="box-shadow:0 0 0 2px ${DEPT_RENK[st.dep]||'#999'}">${st.ini}</span>
+      <span class="ec-t"><span class="ec-n">${st.ad.split(' ')[0]}</span><span class="ec-s">${alt}</span></span>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- ŞİRKET RİTMİ (izin + doğum günü + tatil + etkinlik tek akış) ---------- */
+const DOGUMLER=[['2026-11-18','Esma Keseroğlu'],['2026-12-09','Hasan Şahin'],['2026-12-27','Zeynep Kaya']];
+const TATILLER=[['2026-08-30','Zafer Bayramı'],['2026-10-29','Cumhuriyet Bayramı'],['2027-01-01','Yılbaşı']];
+const ETKINLIKLER=[['2026-09-12','KVKK Eğitimi'],['2026-10-03','Saha Güvenliği Tatbikatı'],['2026-12-28','Yıl Sonu Toplantısı']];
+function buildRitim(){
+  const items=[];
+  LEAVES.forEach(l=>{
+    if(l.durum==='reddedildi'||l.bit<BUGUN)return;
+    const aktif=l.bas<=BUGUN;
+    items.push({t:aktif?l.bit:l.bas,ic:'ic-plane',renk:'var(--emerald)',
+      txt:`${l.ad} · ${l.tur}${aktif?' — izinde, son gün':''}`,
+      sub:dRange(l.bas,l.bit)+' · '+l.gun.toLocaleString('tr-TR')+' gün',
+      bekliyor:l.durum==='bekliyor'});
+  });
+  DOGUMLER.forEach(([t,ad])=>{if(t>=BUGUN)items.push({t,ic:'ic-gift',renk:'var(--gold)',txt:ad+' · doğum günü',sub:''});});
+  TATILLER.forEach(([t,ad])=>{if(t>=BUGUN)items.push({t,ic:'ic-flag',renk:'var(--navy)',txt:ad,sub:'resmi tatil'});});
+  ETKINLIKLER.forEach(([t,ad])=>{if(t>=BUGUN)items.push({t,ic:'ic-cal',renk:'hsl(210 10% 55%)',txt:ad,sub:'şirket etkinliği'});});
+  return items.sort((a,b)=>a.t.localeCompare(b.t)).slice(0,9);
+}
+function renderRitim(){
+  const html=buildRitim().map(it=>{
+    const [y,m,d]=it.t.split('-');
+    return `<div class="ritim-row">
+      <span class="ritim-d"><b>${+d}</b><span>${AYLAR[+m-1]}${y==='2027'?' ·27':''}</span></span>
+      <span class="ritim-ic" style="background:${it.renk}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#${it.ic}"/></svg></span>
+      <span class="ritim-b">${it.txt}${it.sub?`<span class="sub"> · ${it.sub}</span>`:''}</span>
+      ${it.bekliyor?'<span class="pill amber"><span class="dot"></span>Onay bekliyor</span>':''}
+    </div>`;
+  }).join('');
+  ['ikRitim','ikRitimEmp'].forEach(id=>{const n=el(id);if(n)n.innerHTML=html;});
+}
+
 initStaff(); renderStaff(); initLeaves(); renderLeaves();
-updateIkKpis(); renderIkCap(); renderIkAppr(); renderBordro();
+updateIkKpis(); renderIkCap(); renderIkAppr(); renderIkEkip(); renderRitim(); renderBordro();
 </script>
 
 <!-- ============ RAPOR KUYRUĞU + QC EDİTÖRÜ (Faz 2) ============ -->
