@@ -1169,7 +1169,7 @@ function go(view){
   const [t,c]=TITLES[view]||['',''];
   document.getElementById('pageTitle').textContent=t;
   document.getElementById('crumb').textContent=c;
-  if(view==='ihbar'&&!frameLoaded){document.getElementById('ihbarFrame').src='ihbar-giris.html?embed=1';frameLoaded=true;}
+  if(view==='ihbar'&&!frameLoaded){document.getElementById('ihbarFrame').src='ihbar-giris.html?embed=1&r='+Date.now();frameLoaded=true;}
 }
 document.querySelectorAll('.nav-item').forEach(b=>b.onclick=()=>go(b.dataset.view));
 
