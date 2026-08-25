@@ -316,6 +316,26 @@
     section[data-view="ik"].on .ik-stagger>*{animation:none;opacity:1;transform:none}
     .ekip-chip,.appr,#ikCapRows .bf{transition:none}
   }
+  /* Ay Görünümü (Takvim) */
+  .cal-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+  .cal-nav{display:flex;align-items:center;gap:8px}
+  .cal-nav .btn{padding:4px 11px}
+  .cal-nav b{min-width:118px;text-align:center;font-size:13.5px}
+  .cal-leg{display:flex;gap:14px;font-size:10.5px;color:var(--muted);margin-left:auto;flex-wrap:wrap}
+  .cal-leg i{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .cal-dow{font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);text-align:center;padding:4px 0}
+  .cal-d{min-height:60px;border:1px solid var(--line);border-radius:9px;padding:5px 7px;cursor:pointer;transition:border-color .12s, box-shadow .12s;background:var(--card)}
+  .cal-d:hover{border-color:var(--navy)}
+  .cal-d.bos{opacity:0;pointer-events:none;border:none}
+  .cal-d.today{border-color:var(--mint)}
+  .cal-d.sel{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy-050)}
+  .cal-dn{font-size:11px;font-weight:700;color:var(--ink)}
+  .cal-d.hafta-sonu .cal-dn{color:var(--muted);font-weight:600}
+  .cal-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:5px;align-items:center}
+  .cal-dots i{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .cal-dots .cal-artik{font-size:8.5px;color:var(--muted);font-weight:700}
+  .cal-gun{margin-top:12px;border-top:1px dashed var(--line);padding-top:8px}
   /* Cmd-K + Bildirim + Finans */
   .cmdk-overlay{position:fixed;inset:0;background:rgba(30,40,48,.35);z-index:90;display:none}
   .cmdk{position:fixed;left:50%;top:12%;transform:translateX(-50%);width:min(620px,92vw);background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(20,30,40,.25);z-index:91;display:none;overflow:hidden}
@@ -957,6 +977,20 @@
         <div id="rqEditor" style="display:none"></div>
       </section>
       <section class="view" data-view="takvim">
+        <div class="block" style="margin-bottom:14px">
+          <div class="cal-head">
+            <h3 style="margin:0">Ay Görünümü</h3>
+            <div class="cal-nav">
+              <button class="btn" onclick="calShift(-1)" aria-label="Önceki ay">‹</button>
+              <b id="calTitle"></b>
+              <button class="btn" onclick="calShift(1)" aria-label="Sonraki ay">›</button>
+              <button class="btn" style="font-size:11px" onclick="calToday()">Bugün</button>
+            </div>
+            <div class="cal-leg"><span><i style="background:var(--mintd,#2F8F8D)"></i>randevu</span><span><i style="background:var(--emerald)"></i>izin</span><span><i style="background:var(--navy)"></i>tatil</span><span><i style="background:var(--gold)"></i>doğum günü</span><span><i style="background:hsl(210 10% 55%)"></i>etkinlik</span></div>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-gun" id="calGun"></div>
+        </div>
         <div class="block" style="margin-bottom:14px"><h3>Keşif Randevuları · Bu Hafta</h3>
         <div style="font-size:11px;color:var(--muted);margin:-8px 0 10px">Randevuya tıklayın — alttaki seyahat planı o dosyaya göre kurulur</div>
         <div id="ajanda"></div></div>
@@ -1348,9 +1382,9 @@ function sendApproval(){
   document.getElementById('approvalBar').innerHTML='<div class="ab-txt"><b>Onaya gönderildi.</b> '+name+' ('+total+') Yönetici/Finans onay kuyruğunda. Onaydan sonra guardrail’li ödeme (sanal kart) yapılır ve Expense Claim oluşur.</div>';
 }
 const RANDEVULAR=[
- {g:'26 Ağu Çar 09:00',rap:'KAR-299/2026',ins:'Dicle Elektrik Dağıtım A.Ş.',yer:'Çüngüş / Diyarbakır',rota:'İstanbul (SAW) → Diyarbakır (DIY)',eks:'Arsal Güler',sub:'26 Ağu 2026 · randevu 09:00 · 2 gece'},
- {g:'27 Ağu Per 10:30',rap:'GES-61/2026',ins:'Karapınar GES Sahası',yer:'Karapınar / Konya',rota:'İstanbul (SAW) → Konya (KYA)',eks:'Mehmetcan Aydın',sub:'27 Ağu 2026 · randevu 10:30 · 1 gece'},
- {g:'28 Ağu Cum 14:00',rap:'SEL-88/2026',ins:'Bodrum Tekstil Deposu',yer:'Bodrum / Muğla',rota:'İstanbul (SAW) → Bodrum (BJV)',eks:'Zeynep Kaya',sub:'28 Ağu 2026 · randevu 14:00 · 1 gece'}];
+ {t:'2026-08-26',g:'26 Ağu Çar 09:00',rap:'KAR-299/2026',ins:'Dicle Elektrik Dağıtım A.Ş.',yer:'Çüngüş / Diyarbakır',rota:'İstanbul (SAW) → Diyarbakır (DIY)',eks:'Arsal Güler',sub:'26 Ağu 2026 · randevu 09:00 · 2 gece'},
+ {t:'2026-08-27',g:'27 Ağu Per 10:30',rap:'GES-61/2026',ins:'Karapınar GES Sahası',yer:'Karapınar / Konya',rota:'İstanbul (SAW) → Konya (KYA)',eks:'Mehmetcan Aydın',sub:'27 Ağu 2026 · randevu 10:30 · 1 gece'},
+ {t:'2026-08-28',g:'28 Ağu Cum 14:00',rap:'SEL-88/2026',ins:'Bodrum Tekstil Deposu',yer:'Bodrum / Muğla',rota:'İstanbul (SAW) → Bodrum (BJV)',eks:'Zeynep Kaya',sub:'28 Ağu 2026 · randevu 14:00 · 1 gece'}];
 function renderAjanda(sec){
   el('ajanda').innerHTML=RANDEVULAR.map((r,i)=>`
    <div class="dk-row" onclick="ajandaSec(${i})" style="${i===sec?'background:var(--gold-soft);border-radius:8px;padding-left:8px;padding-right:8px':''}">
@@ -1771,7 +1805,7 @@ function leaveAct(id,act){
   const l=LEAVES.find(x=>x.id===id); if(!l)return;
   const fin=()=>{
     l.durum=act==='onay'?'onayli':'reddedildi';
-    renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis(); renderIkEkip(); renderRitim(); renderIkCap(); if(typeof updateNotifBadge==='function')updateNotifBadge();
+    renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis(); renderIkEkip(); renderRitim(); renderIkCap(); if(typeof updateNotifBadge==='function')updateNotifBadge(); if(typeof renderCal==='function')renderCal();
     dqToast(`${l.ad} · ${l.tur} — ${act==='onay'?'onaylandı':'reddedildi'}.`);
   };
   const row=document.querySelector('#ikApprList .appr[data-lid="'+id+'"]');
@@ -2553,6 +2587,53 @@ function renderGeo(){
 function geoSelIl(il){GEO_IL=GEO_IL===il?'':il;renderGeo();}
 function geoSetD(d,btn){GEO_D=d;[...el('geoDonem').children].forEach(x=>x.classList.toggle('on',x===btn));el('geoOzel').style.display=d==='ozel'?'flex':'none';renderGeo();}
 renderGeo();
+
+/* ===== AY GÖRÜNÜMÜ (Takvim & Seyahat) — randevu+izin+tatil+doğum günü+etkinlik tek ızgara ===== */
+const AY_UZUN=['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+const CAL_RENK={randevu:'var(--mintd, #2F8F8D)',izin:'var(--emerald)',tatil:'var(--navy)',etkinlik:'hsl(210 10% 55%)',dogum:'var(--gold)'};
+const CAL_IC={randevu:'ic-cal',izin:'ic-plane',tatil:'ic-flag',etkinlik:'ic-cal',dogum:'ic-gift'};
+let CAL_Y=+BUGUN.slice(0,4), CAL_M=+BUGUN.slice(5,7)-1, CAL_SEL=BUGUN;
+function calEvents(){
+  const map={}; const add=(t,tip,txt)=>{if(!t)return;(map[t]=map[t]||[]).push({tip,txt});};
+  RANDEVULAR.forEach(r=>add(r.t,'randevu',`${r.g.split(' ').pop()} · Keşif — ${r.ins} (${r.eks})`));
+  LEAVES.forEach(l=>{
+    if(l.durum==='reddedildi')return;
+    const d=new Date(l.bas+'T12:00:00'), bit=new Date(l.bit+'T12:00:00');
+    while(d<=bit){
+      add(d.toISOString().slice(0,10),'izin',`${l.ad} · ${l.tur}${l.durum==='bekliyor'?' — onay bekliyor':''}`);
+      d.setDate(d.getDate()+1);
+    }
+  });
+  TATILLER.forEach(([t,ad])=>add(t,'tatil',ad+' · resmi tatil'));
+  ETKINLIKLER.forEach(([t,ad])=>add(t,'etkinlik',ad));
+  DOGUMLER.forEach(([t,ad])=>add(t,'dogum',ad+' · doğum günü'));
+  return map;
+}
+function renderCal(){
+  const ev=calEvents();
+  el('calTitle').textContent=AY_UZUN[CAL_M]+' '+CAL_Y;
+  const dow=(new Date(CAL_Y,CAL_M,1).getDay()+6)%7;
+  const gunSay=new Date(CAL_Y,CAL_M+1,0).getDate();
+  let html=['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'].map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<dow;i++)html+='<div class="cal-d bos"></div>';
+  for(let g=1;g<=gunSay;g++){
+    const iso=`${CAL_Y}-${String(CAL_M+1).padStart(2,'0')}-${String(g).padStart(2,'0')}`;
+    const e=ev[iso]||[];
+    const hs=((dow+g-1)%7)>=5;
+    const dots=e.slice(0,4).map(x=>`<i style="background:${CAL_RENK[x.tip]}"></i>`).join('')+(e.length>4?`<span class="cal-artik">+${e.length-4}</span>`:'');
+    html+=`<div class="cal-d${iso===BUGUN?' today':''}${iso===CAL_SEL?' sel':''}${hs?' hafta-sonu':''}" onclick="calSel('${iso}')" title="${e.length?e.length+' kayıt':''}"><div class="cal-dn">${g}</div><div class="cal-dots">${dots}</div></div>`;
+  }
+  el('calGrid').innerHTML=html;
+  const list=ev[CAL_SEL]||[];
+  el('calGun').innerHTML=(list.length
+    ?`<div class="aging-lab" style="margin-bottom:6px">${dLong(CAL_SEL)}</div>`+list.map(x=>`
+      <div class="ritim-row"><span class="ritim-ic" style="background:${CAL_RENK[x.tip]};width:22px;height:22px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#${CAL_IC[x.tip]}"/></svg></span><span class="ritim-b">${x.txt}</span></div>`).join('')
+    :`<div class="aging-lab">${dLong(CAL_SEL)} — bu günde kayıt yok</div>`);
+}
+function calShift(d){CAL_M+=d;if(CAL_M<0){CAL_M=11;CAL_Y--;}if(CAL_M>11){CAL_M=0;CAL_Y++;}renderCal();}
+function calToday(){CAL_Y=+BUGUN.slice(0,4);CAL_M=+BUGUN.slice(5,7)-1;CAL_SEL=BUGUN;renderCal();}
+function calSel(iso){CAL_SEL=iso;renderCal();}
+renderCal();
 </script>
 </body>
 </html>
