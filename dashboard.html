@@ -94,11 +94,11 @@
   .rol-sw{display:inline-flex;background:var(--navy-050);border-radius:10px;padding:3px;margin-bottom:14px}
   .rol-sw button{border:none;background:none;padding:7px 16px;border-radius:8px;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;transition:.12s}
   .rol-sw button.on{background:#fff;color:var(--navy);box-shadow:var(--shadow)}
-  .gunaydin{background:var(--navy);color:#fff;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:14px;line-height:1.65}
+  .gunaydin{background:#ba181b;color:#fff;border-radius:var(--radius);padding:16px 20px;margin-bottom:16px;font-size:14px;line-height:1.65}
   .gunaydin.iyi{background:var(--emerald)}
-  .gunaydin .gs{cursor:pointer;color:#ba181b;background:hsl(40 30% 96%);border-radius:6px;padding:1px 7px;font-weight:700;border-bottom:none}
-  .gunaydin .gs:hover{background:#fff}
-  .gunaydin .hi{color:var(--gold);font-weight:700}
+  .gunaydin .gs{cursor:pointer;border-bottom:1.5px dashed hsl(0 0% 100%/.55);font-weight:700}
+  .gunaydin .gs:hover{border-bottom-color:#fff}
+  .gunaydin .hi{color:#FFE1A8;font-weight:700}
   .kpi .trend{display:flex;align-items:center;gap:8px;margin-top:6px}
   .kpi .delta{font-size:11px;font-weight:700;border-radius:999px;padding:2px 8px}
   .kpi .delta.up{background:var(--rose-soft);color:var(--rose)}
@@ -298,8 +298,7 @@
   .ritim-ic{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;color:#fff;flex:none}
   .ritim-b{flex:1;font-size:12.5px;color:var(--ink);min-width:0}
   .ritim-b .sub{font-size:11px;color:var(--muted)}
-  .gunaydin .gd-l{cursor:pointer;color:#ba181b;background:hsl(40 30% 96%);border-radius:6px;padding:1px 7px;font-weight:700;text-decoration:none}
-  .gunaydin .gd-l:hover{background:#fff}
+  .gunaydin .gd-l{cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:700}
   section[data-view="ik"].on .ik-stagger>*{opacity:0;transform:translateY(10px);animation:ikIn .5s cubic-bezier(.22,.9,.35,1) forwards}
   section[data-view="ik"].on .ik-stagger>*:nth-child(1){animation-delay:.02s}
   section[data-view="ik"].on .ik-stagger>*:nth-child(2){animation-delay:.09s}
