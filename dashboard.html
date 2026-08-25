@@ -107,8 +107,19 @@
   .spark{flex:1;height:26px}
   .spark polyline{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .action-card .ac-old{font-size:11px;font-weight:600;color:hsl(30 62% 38%);margin-top:6px}
-  .dk-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-top:1px solid var(--navy-050);cursor:pointer}
-  .dk-row:first-of-type{border-top:none}
+  .dk-item{border-top:1px solid var(--navy-050)}
+  .dk-item:first-of-type{border-top:none}
+  .dk-row{display:flex;align-items:center;gap:11px;padding:9px 0;cursor:pointer}
+  .dk-x{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.22,.9,.35,1)}
+  .dk-x-in{padding:2px 2px 14px 4px}
+  .dk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 16px}
+  .dk-grid .k{display:block;font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);margin-bottom:1px}
+  .dk-grid b{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .dk-x-act{display:flex;gap:8px;margin-top:12px}
+  .dk-chev{color:var(--navy);opacity:.4;transition:transform .3s ease;flex:none}
+  .dk-row:hover .dk-chev{opacity:1}
+  .dk-item.on .dk-chev{transform:rotate(180deg)}
+  @media (prefers-reduced-motion: reduce){.dk-x{transition:none}.dk-chev{transition:none}}
   .dk-row:hover .dk-t{color:var(--navy)}
   .dk-yas{flex:none;white-space:nowrap;text-align:center;font-size:12px;font-weight:800;border-radius:8px;padding:5px 7px}
   .dk-yas.rose{background:var(--rose-soft);color:var(--rose)} .dk-yas.amber{background:var(--amber-soft);color:hsl(30 62% 34%)}
@@ -2065,6 +2076,15 @@ function pnlData(){
     bugunGelen:withAge.filter(x=>x.a===0),dunGelen:withAge.filter(x=>x.a===1),
     mine:withAge.filter(x=>x.r.eks===PNL_USER)};
 }
+let DK_OPEN=-1;
+function dkToggle(i){
+  const x=el('dkX'+i); if(!x)return;
+  if(DK_OPEN>-1&&DK_OPEN!==i){const p=el('dkX'+DK_OPEN);if(p){p.style.maxHeight='0px';p.closest('.dk-item').classList.remove('on');}}
+  const item=x.closest('.dk-item');
+  if(DK_OPEN===i){x.style.maxHeight='0px';item.classList.remove('on');DK_OPEN=-1;}
+  else{x.style.maxHeight=x.scrollHeight+'px';item.classList.add('on');DK_OPEN=i;}
+  document.querySelectorAll('#pnlDikkat .dk-row').forEach((row,ri)=>row.setAttribute('aria-expanded',ri===DK_OPEN?'true':'false'));
+}
 function renderPanel(rol){
   const d=pnlData(),g=el('gunaydin');
   const rp=REPORTS.filter(r=>r.stage==='qc'||r.stage==='onay').length;
@@ -2112,12 +2132,29 @@ function renderPanel(rol){
   // dikkat isteyenler
   const list=(rol==='eksper'?d.mine:d.withAge).slice(0,4);
   el('pnlDikkatH').textContent=rol==='eksper'?'En Eski Açık Dosyalarım':'Uzun Süredir Açık Dosyalar';
-  el('pnlDikkat').innerHTML=list.map(({r,a})=>`
-    <div class="dk-row" onclick="openDetail('${r.no}')">
-      <span class="dk-yas ${a>30?'rose':'amber'}">${a} gündür açık</span>
-      <div class="dk-b"><div class="dk-t">${r.ins}</div><div class="dk-s">${BRANS[r.brK]} · ${r.il} · aşama: ${r.as} · ${r.eks}</div></div>
-      <svg class="dk-git" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+  el('pnlDikkat').innerHTML=list.map(({r,a},i)=>`
+    <div class="dk-item">
+      <div class="dk-row" role="button" tabindex="0" aria-expanded="false" onclick="dkToggle(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();dkToggle(${i})}">
+        <span class="dk-yas ${a>30?'rose':'amber'}">${a} gündür açık</span>
+        <div class="dk-b"><div class="dk-t">${r.ins}</div><div class="dk-s">${BRANS[r.brK]} · ${r.il} · aşama: ${r.as} · ${r.eks}</div></div>
+        <svg class="dk-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="dk-x" id="dkX${i}"><div class="dk-x-in">
+        <div class="dk-grid">
+          <div><span class="k">Dosya</span><b>${r.no}</b></div>
+          <div><span class="k">Rapor</span><b>${r.rap}</b></div>
+          <div><span class="k">Sigortacı</span><b>${r.sig}</b></div>
+          <div><span class="k">Montan</span><b>${mn(r.mon,r.pb)}</b></div>
+          <div><span class="k">Eksper</span><b>${r.eks}</b></div>
+          <div><span class="k">Aşama</span><b>${r.as}</b></div>
+        </div>
+        <div class="dk-x-act">
+          <button class="btn" onclick="event.stopPropagation();openDetail('${r.no}')">Dosya Detayı</button>
+          ${REPORTS.some(x=>x.dosya===r.no)?`<button class="btn primary" onclick="event.stopPropagation();go('raporlar')">Rapora Git</button>`:''}
+        </div>
+      </div></div>
     </div>`).join('');
+  DK_OPEN=-1;
   // finans yalniz yonetici
   el('pnlFinansRow').style.display=rol==='yonetici'?'':'none';
   renderMap(rol);
