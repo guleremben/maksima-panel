@@ -420,7 +420,10 @@ const para=n=>(n||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFrac
 const parseNum=s=>{const r=(s||'').replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,'');return r?parseFloat(r):0};
 
 /* ---- branş (parantezsiz, sadece ad) ---- */
-function fillBrans(sel){const cur=$('brans').value;$('brans').innerHTML='<option value="">— seçin —</option>'+cats.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');$('brans').value=sel??cur}
+function fillBrans(sel){const cur=$('brans').value;
+  let meta={};try{meta=JSON.parse(localStorage.getItem('mx_cats_meta'))||{}}catch(e){}
+  const aktif=cats.filter(c=>!(meta[c[0]]&&meta[c[0]].aktif===false)); /* Ayarlar > Branş Yönetimi'nde pasifleştirilen branş yeni dosyada seçilemez */
+  $('brans').innerHTML='<option value="">— seçin —</option>'+aktif.map(c=>`<option value="${c[0]}">${c[1]}</option>`).join('');$('brans').value=sel??cur}
 function nextRaporNo(kod){const y=new Date().getFullYear();const c=store.get(LS.counters,{});return `${kod}-${(c[kod+'_'+y]||0)+1}/${y}`}
 function onBrans(){const c=catByKod(val('brans'));$('sKat').textContent=c?c[1]:'—';if(c&&!raporNoTouched){$('raporNo').value=nextRaporNo(c[0]);$('sRaporNo').textContent=$('raporNo').value}}
 

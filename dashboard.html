@@ -316,6 +316,35 @@
     section[data-view="ik"].on .ik-stagger>*{animation:none;opacity:1;transform:none}
     .ekip-chip,.appr,#ikCapRows .bf{transition:none}
   }
+  /* Cmd-K + Bildirim + Finans */
+  .cmdk-overlay{position:fixed;inset:0;background:rgba(30,40,48,.35);z-index:90;display:none}
+  .cmdk{position:fixed;left:50%;top:12%;transform:translateX(-50%);width:min(620px,92vw);background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(20,30,40,.25);z-index:91;display:none;overflow:hidden}
+  .cmdk.on,.cmdk-overlay.on{display:block}
+  .cmdk input{width:100%;border:none;outline:none;background:transparent;padding:16px 18px;font-size:15px;color:var(--ink);border-bottom:1px solid var(--line);font-family:inherit}
+  .cmdk-res{max-height:340px;overflow:auto;padding:6px}
+  .cmdk-g{font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:8px 12px 3px}
+  .cmdk-i{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:9px;cursor:pointer;font-size:13px;color:var(--ink)}
+  .cmdk-i .s{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap}
+  .cmdk-i.on,.cmdk-i:hover{background:var(--navy-050)}
+  .cmdk-foot{font-size:10.5px;color:var(--muted);padding:9px 14px;border-top:1px solid var(--line)}
+  .cmdk-bos{padding:18px 14px;font-size:12.5px;color:var(--muted)}
+  .bell{position:relative}
+  .bell-badge{position:absolute;top:-4px;right:-5px;min-width:16px;height:16px;border-radius:99px;background:#ba181b;color:#fff;font-size:9.5px;font-weight:800;display:grid;place-items:center;padding:0 4px;border:2px solid var(--bg)}
+  .notif{position:fixed;top:64px;right:22px;width:330px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 44px rgba(20,30,40,.18);z-index:80;display:none;overflow:hidden}
+  .notif.on{display:block}
+  .notif-h{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:12px 14px 8px;border-bottom:1px solid var(--line)}
+  .notif-i{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;font-size:12.5px;align-items:flex-start}
+  .notif-i:last-child{border-bottom:none}
+  .notif-i:hover{background:var(--navy-050)}
+  .notif-i .nd{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px}
+  .notif-i .nt{color:var(--ink);line-height:1.4}
+  .notif-i .ns{font-size:11px;color:var(--muted)}
+  .fin-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .fin-row:last-child{border-bottom:none}
+  .fin-yas{flex:none;font-size:11px;font-weight:800;border-radius:8px;padding:4px 8px;min-width:58px;text-align:center}
+  .fin-yas.r{background:var(--rose-soft);color:var(--rose)} .fin-yas.a{background:var(--amber-soft);color:hsl(30 62% 34%)} .fin-yas.n{background:var(--navy-050);color:var(--navy)}
+  .fin-b{flex:1;min-width:0} .fin-t{font-size:12.5px;font-weight:600} .fin-s{font-size:11px;color:var(--muted)}
+  .fin-p{font-weight:800;font-size:13px;font-variant-numeric:tabular-nums}
   /* İş Coğrafyası (Arşiv) */
   .geo-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
   .geo-meta{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
@@ -688,11 +717,11 @@
         <h1 id="pageTitle">Panel</h1>
         <div class="crumb" id="crumb">Genel bakış · bugünün durumu</div>
       </div>
-      <div class="search" onclick="alert('Cmd-K omni-search — Faz 1 (sözcük) / Faz 7 (semantik)')">
+      <div class="search" onclick="openCmdK()">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.5" y2="16.5"/></svg>
         <span>Dosya, sigortalı, poliçe ara…</span> <kbd>⌘K</kbd>
       </div>
-      <div class="bell" title="Bildirimler"><img src="icons/notification.png" alt="Bildirimler"></div>
+      <div class="bell" id="bellBtn" title="Bildirimler" onclick="toggleNotif(event)"><img src="icons/notification.png" alt="Bildirimler"><span class="bell-badge" id="bellBadge" style="display:none"></span></div>
     </header>
 
     <div class="content">
@@ -723,9 +752,9 @@
           <div class="block">
             <h3>Finansal Özet · Bu Ay</h3>
             <div class="fin">
-              <div class="fin-item"><div class="fl">Kesilen Fatura</div><div class="fv">₺1,85 Mn</div></div>
-              <div class="fin-item"><div class="fl">Tahsil Edilen</div><div class="fv">₺1,20 Mn</div></div>
-              <div class="fin-item"><div class="fl">Bekleyen</div><div class="fv">₺650 B</div></div>
+              <div class="fin-item"><div class="fl">Kesilen Fatura</div><div class="fv" id="finKesilen">—</div></div>
+              <div class="fin-item"><div class="fl">Tahsil Edilen</div><div class="fv" id="finTahsil">—</div></div>
+              <div class="fin-item"><div class="fl">Bekleyen</div><div class="fv" id="finBekleyen">—</div></div>
             </div>
             <div class="aging-lab">Bekleyen tahsilatın gecikme dağılımı</div>
             <div class="aging">
@@ -734,7 +763,7 @@
               <span style="width:15%;background:var(--rose)"></span>
             </div>
             <div class="aging-leg"><span><i style="background:var(--gold)"></i>0–30 gün</span><span><i style="background:var(--amber)"></i>31–60 gün</span><span><i style="background:var(--rose)"></i>60+ gün</span></div>
-            <div class="fin-risk" onclick="go('finans')"><span>60 günü aşan tahsilat: ₺97 B (3 fatura)</span><span>Faturalara git →</span></div>
+            <div class="fin-risk" onclick="go('finans')"><span id="finRisk">—</span><span>Faturalara git →</span></div>
           </div>
 
           <div class="block">
@@ -1111,7 +1140,35 @@
           </div>
         </div>
       </section>
-      <section class="view" data-view="finans"><div class="placeholder"><img class="ic" src="icons/finans.png" alt=""><h3>Finans</h3><p>Fatura / e-fatura / tahsilat aging / mutabakat — Faz 5.</p></div></section>
+      <section class="view" data-view="finans">
+        <div style="display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;font-size:12.5px;color:var(--muted)">
+          <span>e-Fatura kesimi <b style="color:var(--ink)">Faz 5</b>'te (entegratör seçimi bekliyor · A1). Bu ekran tahsilat ve gider takibinin önizlemesidir — rakamlar Panel'deki Finansal Özet ile aynı kaynaktan gelir.</span>
+          <button class="btn" style="margin-left:auto" onclick="go('ayarlar')">Ayarlar</button>
+        </div>
+        <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi"><div class="lab"><span class="d" style="background:var(--navy)"></span> Kesilen Fatura · Bu Ay</div><div class="val" id="fKesilen" style="font-size:22px">—</div><div class="sub">ekspertiz ücreti + masraf</div></div>
+          <div class="kpi"><div class="lab"><span class="d" style="background:var(--emerald)"></span> Tahsil Edilen</div><div class="val" id="fTahsil" style="font-size:22px">—</div><div class="sub">bu ay hesaba geçen</div></div>
+          <div class="kpi"><div class="lab"><span class="d" style="background:var(--amber)"></span> Bekleyen Tahsilat</div><div class="val" id="fBekleyen" style="font-size:22px">—</div><div class="sub" id="fBekleyenSub">—</div></div>
+        </div>
+        <div class="two-col">
+          <div class="block">
+            <h3>Tahsilat Kuyruğu</h3>
+            <div class="aging-lab" style="margin-bottom:8px">gecikme yaşına göre · 60+ gün kırmızı</div>
+            <div id="finKuyruk"></div>
+          </div>
+          <div>
+            <div class="block">
+              <h3>Onay Bekleyen Giderler</h3>
+              <div id="finGider"></div>
+            </div>
+            <div class="block" style="margin-top:16px">
+              <h3>Faturalanacak Dosyalar</h3>
+              <div class="aging-lab" style="margin-bottom:8px">raporu Onay aşamasında — tutar, ücret tarifesinden otomatik önerilir</div>
+              <div id="finFatura"></div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section class="view" data-view="ayarlar">
         <div class="set-layout">
           <aside class="set-nav" id="setNav">
@@ -1240,6 +1297,18 @@
   <div class="sheet-foot" id="sheetFoot"></div>
 </aside>
 <div class="dq-toast" id="dqToast"></div>
+
+<div class="cmdk-overlay" id="cmdkOverlay" onclick="closeCmdK()"></div>
+<div class="cmdk" id="cmdk" role="dialog" aria-label="Hızlı arama">
+  <input id="cmdkInput" placeholder="Dosya no, sigortalı, personel, ekran ara…  (Esc kapatır)" autocomplete="off">
+  <div class="cmdk-res" id="cmdkRes"></div>
+  <div class="cmdk-foot">↑↓ gezin · Enter aç · Faz 7'de içerik/semantik arama bu kutuya gelecek</div>
+</div>
+
+<div class="notif" id="notifPanel">
+  <div class="notif-h">Bildirimler</div>
+  <div id="notifList"></div>
+</div>
 
 <script>
 const TITLES={
@@ -1702,7 +1771,7 @@ function leaveAct(id,act){
   const l=LEAVES.find(x=>x.id===id); if(!l)return;
   const fin=()=>{
     l.durum=act==='onay'?'onayli':'reddedildi';
-    renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis(); renderIkEkip(); renderRitim(); renderIkCap();
+    renderLeaves(); renderStaff(); renderIkAppr(); updateIkKpis(); renderIkEkip(); renderRitim(); renderIkCap(); if(typeof updateNotifBadge==='function')updateNotifBadge();
     dqToast(`${l.ad} · ${l.tur} — ${act==='onay'?'onaylandı':'reddedildi'}.`);
   };
   const row=document.querySelector('#ikApprList .appr[data-lid="'+id+'"]');
@@ -2099,8 +2168,17 @@ function setNav(s){
   document.querySelector('.content').scrollTop=0;
 }
 document.querySelectorAll('#setNav .set-nav-item').forEach(b=>b.onclick=()=>setNav(b.dataset.s));
+/* Branş TEK KAYNAK: ihbar formuyla aynı localStorage (mx_cats) + aktif/şablon meta (mx_cats_meta) */
+function brList(){
+  let cats=null;try{cats=JSON.parse(localStorage.getItem('mx_cats'))}catch(e){}
+  if(!Array.isArray(cats)||!cats.length)cats=BRANSLAR.map(b=>[b.kod,b.ad,b.sla]);
+  let meta={};try{meta=JSON.parse(localStorage.getItem('mx_cats_meta'))||{}}catch(e){}
+  return cats.map(c=>({kod:c[0],ad:c[1],sla:c[2],
+    aktif:!(meta[c[0]]&&meta[c[0]].aktif===false),
+    sablon:['YAN','KAR','SEL','MK','GES'].includes(c[0])}));
+}
 function renderBrans(){
-  el('bransBody').innerHTML=BRANSLAR.map(b=>`<tr>
+  el('bransBody').innerHTML=brList().map(b=>`<tr>
     <td><span class="rapor">${b.kod}</span></td>
     <td>${b.ad}</td>
     <td>${b.sla} gün</td>
@@ -2108,21 +2186,47 @@ function renderBrans(){
     <td style="text-align:right"><button class="tgl ${b.aktif?'on':''}" onclick="toggleBrans('${b.kod}')" title="${b.aktif?'Aktif':'Pasif'}"></button></td>
   </tr>`).join('');
 }
-function toggleBrans(kod){const b=BRANSLAR.find(x=>x.kod===kod);if(!b)return;b.aktif=!b.aktif;renderBrans();dqToast(`${b.ad} (${kod}) ${b.aktif?'aktif edildi':'pasifleştirildi'}.`);}
+function toggleBrans(kod){
+  const b=brList().find(x=>x.kod===kod);if(!b)return;
+  let meta={};try{meta=JSON.parse(localStorage.getItem('mx_cats_meta'))||{}}catch(e){}
+  meta[kod]=meta[kod]||{};meta[kod].aktif=!b.aktif;
+  localStorage.setItem('mx_cats_meta',JSON.stringify(meta));
+  renderBrans();
+  dqToast(`${b.ad} (${kod}) ${!b.aktif?'aktif edildi':'pasifleştirildi'} — ihbar formu bir sonraki açılışta günceller.`);
+}
 function addBrans(){
   const ad=prompt('Yeni branş adı (örn. Emniyeti Suistimal):');if(!ad||!ad.trim())return;
   if(/trafik|kasko/i.test(ad)){dqToast('Trafik/Kasko eklenemez — Maksima yalnız oto-dışı riskler.');return;}
   let kod=prompt('Branş kodu / rapor no öneki (örn. ES):',ad.trim().slice(0,3).toLocaleUpperCase('tr'));if(!kod||!kod.trim())return;
   kod=kod.trim().toLocaleUpperCase('tr').replace(/[^A-ZÇĞİÖŞÜ0-9]/g,'');
-  if(BRANSLAR.some(b=>b.kod===kod)){dqToast('Bu kod zaten var: '+kod);return;}
+  if(brList().some(b=>b.kod===kod)){dqToast('Bu kod zaten var: '+kod);return;}
   const sla=+(prompt('Önerilen SLA (gün):','20')||20);
-  BRANSLAR.push({kod,ad:ad.trim(),sla,sablon:false,aktif:true});
-  renderBrans();dqToast(`Branş eklendi: ${ad.trim()} (${kod}).`);
+  let cats=null;try{cats=JSON.parse(localStorage.getItem('mx_cats'))}catch(e){}
+  if(!Array.isArray(cats)||!cats.length)cats=BRANSLAR.map(b=>[b.kod,b.ad,b.sla]);
+  cats.push([kod,ad.trim(),sla]);
+  localStorage.setItem('mx_cats',JSON.stringify(cats));
+  renderBrans();dqToast(`Branş eklendi: ${ad.trim()} (${kod}) — ihbar formuyla aynı listeye yazıldı.`);
 }
-function saveEsik(){dqToast(`Büyük hasar eşiği kaydedildi: ${el('esikInput').value} TRY — üzeri dosyalar koordinatöre bildirilecek.`);}
-function saveHook(){const v=el('hookInput').value.trim();dqToast(v?'n8n webhook kaydedildi: '+v:'Webhook temizlendi — lokal mod.');}
+function saveEsik(){
+  const v=parseInt((el('esikInput').value||'').replace(/[^0-9]/g,''),10)||10000000;
+  localStorage.setItem('mx_esik',String(v));
+  el('esikInput').value=v.toLocaleString('tr-TR');
+  CASES.forEach(c=>{c.buyuk=c.mon>=v;});
+  if(typeof renderCases==='function')renderCases();
+  dqToast(`Büyük hasar eşiği ₺${v.toLocaleString('tr-TR')} — şu an ${CASES.filter(c=>c.buyuk&&!c.closed).length} açık dosya "Büyük" işaretli.`);
+}
+function saveHook(){
+  const v=el('hookInput').value.trim();
+  if(v)localStorage.setItem('mx_hook',v);else localStorage.removeItem('mx_hook');
+  dqToast(v?'n8n webhook kaydedildi (kalıcı): '+v:'Webhook temizlendi — lokal mod.');
+}
 function tglSet(btn,label){btn.classList.toggle('on');dqToast(`${label}: ${btn.classList.contains('on')?'açık':'kapalı'}.`);}
 renderBrans();
+(function(){ /* kayıtlı eşik + webhook yükle */
+  const ev=parseInt(localStorage.getItem('mx_esik')||'',10);
+  if(ev){el('esikInput').value=ev.toLocaleString('tr-TR');CASES.forEach(c=>{c.buyuk=c.mon>=ev;});if(typeof renderCases==='function')renderCases();}
+  const hv=localStorage.getItem('mx_hook');if(hv)el('hookInput').value=hv;
+})();
 </script>
 
 <!-- ============ PANEL v2 (rol bazli + harita + animasyon) ============ -->
@@ -2159,6 +2263,133 @@ function pnlData(){
     bugunGelen:withAge.filter(x=>x.a===0),dunGelen:withAge.filter(x=>x.a===1),
     mine:withAge.filter(x=>x.r.eks===PNL_USER)};
 }
+/* ===== FİNANS TEK KAYNAK (panel şeridi + Finans ekranı) ===== */
+const FIN={kesilen:1850000,tahsil:1200000,
+ bekleyen:[
+  {no:'F-2026-0311',dosya:'HD-2025-00327',firma:'Anadolu Sigorta',t:34500,gun:118},
+  {no:'F-2026-0347',dosya:'HD-2025-00335',firma:'Allianz Sigorta',t:41200,gun:96},
+  {no:'F-2026-0402',dosya:'HD-2026-00003',firma:'Ray Sigorta',t:21300,gun:77},
+  {no:'F-2026-0688',dosya:'HD-2026-00006',firma:'Türkiye Sigorta',t:212000,gun:41},
+  {no:'F-2026-0714',dosya:'HD-2026-00004',firma:'Ray Sigorta',t:186000,gun:22},
+  {no:'F-2026-0733',dosya:'HD-2026-00008',firma:'HDI Sigorta',t:155000,gun:9}],
+ giderler:[
+  {id:'g1',ad:'Arsal Güler',ne:'Diyarbakır keşif seyahati — Dicle Elektrik dosyası',t:5350,gun:3},
+  {id:'g2',ad:'Emre Doğru',ne:'Kartalkaya saha — yakıt + 1 gece konaklama',t:2450,gun:1}]};
+const fmtP=n=>n>=1e6?'₺'+(n/1e6).toLocaleString('tr-TR',{maximumFractionDigits:2})+' Mn':'₺'+Math.round(n/1e3)+' B';
+function tarifeYS(mon){ /* Ayarlar > Ücret Tarifesi ile birebir (kademeli) */
+  let k=0,u=0;
+  const dil=[[500000,.025],[2000000,.015],[10000000,.008],[50000000,.004],[Infinity,.002]];
+  let alt=0;for(const[ust,oran]of dil){const p=Math.max(0,Math.min(mon,ust)-alt);u+=p*oran;alt=ust;if(mon<=ust)break;}
+  return Math.max(u,7500);
+}
+function renderPanelFin(){
+  const bek=FIN.bekleyen.reduce((a,f)=>a+f.t,0);
+  const gec=FIN.bekleyen.filter(f=>f.gun>60);
+  const gecT=gec.reduce((a,f)=>a+f.t,0);
+  const set=(id,v)=>{const n=el(id);if(n)n.textContent=v;};
+  set('finKesilen',fmtP(FIN.kesilen));set('finTahsil',fmtP(FIN.tahsil));set('finBekleyen',fmtP(bek));
+  set('finRisk',`60 günü aşan tahsilat: ${fmtP(gecT)} (${gec.length} fatura)`);
+}
+function renderFinans(){
+  const bek=FIN.bekleyen.reduce((a,f)=>a+f.t,0);
+  const gec=FIN.bekleyen.filter(f=>f.gun>60);
+  el('fKesilen').textContent=fmtP(FIN.kesilen);
+  el('fTahsil').textContent=fmtP(FIN.tahsil);
+  el('fBekleyen').textContent=fmtP(bek);
+  el('fBekleyenSub').textContent=`${FIN.bekleyen.length} fatura · 60+ gün: ${fmtP(gec.reduce((a,f)=>a+f.t,0))} (${gec.length})`;
+  el('finKuyruk').innerHTML=[...FIN.bekleyen].sort((a,b)=>b.gun-a.gun).map(f=>`
+    <div class="fin-row">
+      <span class="fin-yas ${f.gun>60?'r':f.gun>30?'a':'n'}">${f.gun} gün</span>
+      <div class="fin-b"><div class="fin-t">${f.no} · ${f.firma}</div><div class="fin-s">${f.dosya}</div></div>
+      <span class="fin-p">${fmtP(f.t)}</span>
+      <button class="btn" style="padding:4px 10px;font-size:11px" onclick="dqToast('${f.firma} — ${f.no} için hatırlatma e-postası kuyruğa alındı (n8n · mutabakat şablonu).')">Hatırlat</button>
+    </div>`).join('');
+  el('finGider').innerHTML=FIN.giderler.length?FIN.giderler.map(g=>`
+    <div class="appr" data-gid="${g.id}"><span class="avatar sm">${g.ad.split(' ').map(x=>x[0]).join('')}</span>
+      <div class="ab"><div class="t">${g.ad} · ${fmtP(g.t)}</div><div class="d">${g.ne} · ${g.gun} gündür bekliyor</div></div>
+      <div class="btns"><button class="okb" onclick="finGiderAct('${g.id}','onay')">Onayla</button><button class="nob" onclick="finGiderAct('${g.id}','ret')">Reddet</button></div>
+    </div>`).join(''):'<div style="font-size:12.5px;color:var(--muted);padding:6px 2px">Bekleyen gider yok — kuyruk temiz.</div>';
+  const fat=CASES.filter(c=>!c.closed&&c.as==='Onay');
+  el('finFatura').innerHTML=fat.length?fat.map(c=>`
+    <div class="fin-row">
+      <div class="fin-b"><div class="fin-t">${c.no} · ${c.ins}</div><div class="fin-s">${c.sig} · montan ${mn(c.mon,c.pb)} · tarife önerisi <b>${fmtP(tarifeYS(c.mon))}</b></div></div>
+      <button class="btn" style="padding:4px 10px;font-size:11px" onclick="dqToast('${c.no} — Sales Invoice taslağı oluşturuldu (kesim Faz 5, entegratör sonrası).')">Fatura Taslağı</button>
+    </div>`).join(''):'<div style="font-size:12.5px;color:var(--muted);padding:6px 2px">Onay aşamasında dosya yok.</div>';
+}
+function finGiderAct(id,act){
+  const i=FIN.giderler.findIndex(g=>g.id===id); if(i<0)return;
+  const g=FIN.giderler[i];
+  const row=document.querySelector('#finGider .appr[data-gid="'+id+'"]');
+  const fin=()=>{FIN.giderler.splice(i,1);renderFinans();renderPanel(PNL_ROL);updateNotifBadge();
+    dqToast(`${g.ad} · ${fmtP(g.t)} gider ${act==='onay'?'onaylandı — muhasebe kuyruğuna geçti':'reddedildi — gerekçe eksper mobiline iletildi'}.`);};
+  if(row){row.classList.add(act==='onay'?'ok-flash':'no-flash');requestAnimationFrame(()=>row.classList.add('out'));setTimeout(fin,330);}else fin();
+}
+
+/* ===== CMD-K HIZLI ARAMA ===== */
+function cmdkIdx(){
+  const r=[];
+  CASES.forEach(c=>r.push({g:'Dosyalar',t:`${c.no} · ${c.ins}`,s:`${BRANS[c.brK]} · ${c.il} · ${c.eks}`,q:(c.no+' '+c.rap+' '+c.ins+' '+c.sig+' '+c.il+' '+c.ilce+' '+c.eks).toLocaleLowerCase('tr'),run:()=>{go('dosyalar');openDetail(c.no);}}));
+  STAFF.forEach(p=>r.push({g:'Personel',t:p.ad,s:p.gorev,q:(p.ad+' '+p.gorev+' '+p.dep).toLocaleLowerCase('tr'),run:()=>{go('personel');openKarne(p.ad);}}));
+  [['panel','Panel'],['ihbar','İhbar Girişi'],['dosyalar','Dosyalar'],['raporlar','Rapor Kuyruğu'],['ik','İK Paneli'],['izin','İzin Yönetimi'],['bordro','Bordro & Maliyet'],['takvim','Takvim & Seyahat'],['arsiv','Arşiv · İş Coğrafyası'],['finans','Finans'],['ayarlar','Ayarlar']].forEach(([v,ad])=>r.push({g:'Ekranlar',t:ad,s:'ekrana git',q:ad.toLocaleLowerCase('tr'),run:()=>go(v)}));
+  return r;
+}
+let CK_LIST=[],CK_SEL=0;
+function openCmdK(){el('cmdkOverlay').classList.add('on');el('cmdk').classList.add('on');const i=el('cmdkInput');i.value='';cmdkRender('');i.focus();}
+function closeCmdK(){el('cmdkOverlay').classList.remove('on');el('cmdk').classList.remove('on');}
+function cmdkRender(q){
+  q=q.trim().toLocaleLowerCase('tr');
+  const all=cmdkIdx();
+  CK_LIST=q?all.filter(x=>x.q.includes(q)).slice(0,8):all.filter(x=>x.g==='Ekranlar').slice(0,6);
+  CK_SEL=0;
+  if(!CK_LIST.length){el('cmdkRes').innerHTML='<div class="cmdk-bos">Sonuç yok — Faz 7\'de rapor içeriğinde de arayabileceksiniz.</div>';return;}
+  let html='',lastG='';
+  CK_LIST.forEach((x,i)=>{
+    if(x.g!==lastG){html+=`<div class="cmdk-g">${x.g}</div>`;lastG=x.g;}
+    html+=`<div class="cmdk-i${i===CK_SEL?' on':''}" data-i="${i}" onclick="cmdkGo(${i})">${x.t}<span class="s">${x.s}</span></div>`;
+  });
+  el('cmdkRes').innerHTML=html;
+}
+function cmdkGo(i){const x=CK_LIST[i];if(!x)return;closeCmdK();x.run();}
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openCmdK();return;}
+  if(!el('cmdk').classList.contains('on'))return;
+  if(e.key==='Escape'){closeCmdK();}
+  else if(e.key==='ArrowDown'){e.preventDefault();CK_SEL=Math.min(CK_SEL+1,CK_LIST.length-1);hlCmdk();}
+  else if(e.key==='ArrowUp'){e.preventDefault();CK_SEL=Math.max(CK_SEL-1,0);hlCmdk();}
+  else if(e.key==='Enter'){e.preventDefault();cmdkGo(CK_SEL);}
+});
+function hlCmdk(){document.querySelectorAll('.cmdk-i').forEach(n=>n.classList.toggle('on',+n.dataset.i===CK_SEL));}
+document.addEventListener('input',e=>{if(e.target&&e.target.id==='cmdkInput')cmdkRender(e.target.value);});
+
+/* ===== BİLDİRİM PANELİ ===== */
+function notifData(){
+  const r=[];
+  const izin=LEAVES.filter(l=>l.durum==='bekliyor').length;
+  if(izin)r.push({renk:'var(--amber)',t:`${izin} izin talebi onayınızı bekliyor`,s:'İK Paneli · kuyruktan onaylanır',run:()=>{go('ik');switchIK('adm');}});
+  pnlData().over30.slice(0,2).forEach(({r:c,a})=>r.push({renk:'#ba181b',t:`${c.ins} ${a} gündür açık`,s:`${BRANS[c.brK]} · aşama: ${c.as}`,run:()=>{go('dosyalar');openDetail(c.no);}}));
+  const gec=FIN.bekleyen.filter(f=>f.gun>60);
+  if(gec.length)r.push({renk:'#ba181b',t:`${gec.length} faturada tahsilat 60 günü aştı`,s:fmtP(gec.reduce((a,f)=>a+f.t,0))+' · Finans',run:()=>go('finans')});
+  r.push({renk:'var(--gold)',t:"Emre Doğru'nun SEDDK levhası 24 gün sonra bitiyor",s:'yenileme başvurusu — Personel',run:()=>{go('personel');openKarne('Emre Doğru');}});
+  if(FIN.giderler.length)r.push({renk:'var(--amber)',t:`${FIN.giderler.length} gider onayı bekliyor`,s:'Finans · seyahat/saha',run:()=>go('finans')});
+  return r;
+}
+function updateNotifBadge(){
+  const n=notifData().length,b=el('bellBadge');
+  if(!b)return; b.textContent=n; b.style.display=n?'grid':'none';
+}
+function toggleNotif(ev){
+  ev&&ev.stopPropagation();
+  const p=el('notifPanel');
+  if(p.classList.contains('on')){p.classList.remove('on');return;}
+  el('notifList').innerHTML=notifData().map((x,i)=>`
+    <div class="notif-i" onclick="notifGo(${i})"><span class="nd" style="background:${x.renk}"></span>
+      <div><div class="nt">${x.t}</div><div class="ns">${x.s}</div></div></div>`).join('')||'<div class="cmdk-bos">Bildirim yok.</div>';
+  window.__notifRuns=notifData();
+  p.classList.add('on');
+}
+function notifGo(i){el('notifPanel').classList.remove('on');const x=window.__notifRuns[i];x&&x.run();}
+document.addEventListener('click',e=>{const p=el('notifPanel');if(p&&p.classList.contains('on')&&!p.contains(e.target)&&e.target.closest('#bellBtn')===null)p.classList.remove('on');});
+
 let DK_OPEN=-1;
 function dkToggle(i){
   const x=el('dkX'+i); if(!x)return;
@@ -2205,10 +2436,11 @@ function renderPanel(rol){
   // aksiyonlar
   const A=el('pnlActions'),ok=rol!=='eksper';
   el('pnlAksiyonH').style.display=ok?'':'none';A.style.display=ok?'':'none';
+  const gidN=FIN.giderler.length, fatN=CASES.filter(c=>!c.closed&&c.as==='Onay').length;
   if(ok)A.innerHTML=[
     {n:rp,l:'Kontrol/imza bekleyen rapor',s:'en eskisi 12 gündür bekliyor',go:'raporlar'},
-    {n:2,l:'Onay bekleyen gider',s:'en eskisi 3 gündür bekliyor',go:'finans'},
-    {n:5,l:'Faturalanacak dosya',s:'en eskisi 8 gündür bekliyor',go:'finans'}
+    {n:gidN,l:'Onay bekleyen gider',s:gidN?`en eskisi ${Math.max(...FIN.giderler.map(g=>g.gun))} gündür bekliyor`:'kuyruk temiz',go:'finans'},
+    {n:fatN,l:'Faturalanacak dosya',s:'raporu Onay aşamasında — imzalanınca kesime hazır',go:'finans'}
   ].map(a=>`<button class="action-card" onclick="go('${a.go}')">
     <div class="ac-top"><span class="ac-count">${a.n}</span><svg class="ac-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></div>
     <div class="ac-lab">${a.l}</div><div class="ac-old">${a.s}</div></button>`).join('');
@@ -2269,6 +2501,7 @@ document.querySelectorAll('#rolSw button').forEach(b=>b.onclick=()=>{
   renderPanel(PNL_ROL);
 });
 renderPanel('yonetici');
+renderPanelFin(); renderFinans(); updateNotifBadge();
 
 /* ===== İŞ COĞRAFYASI (Arşiv sekmesi) ===== */
 const GEO_RENK={YAN:'#e15759',MK:'#4e79a7',GES:'#edc948',KAR:'#76b7b2',SEL:'#59a14f'};
