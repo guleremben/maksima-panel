@@ -235,7 +235,28 @@
   .opt .o-p{font-size:13px;font-weight:700;white-space:nowrap}
   .cars{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
   @media(max-width:760px){.cars{grid-template-columns:1fr}}
-  .car{border:1px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;background:#fff;text-align:center;transition:.12s}
+  .car{border:1px solid var(--line);border-radius:12px;padding:10px 10px 13px;cursor:pointer;background:#fff;text-align:center;transition:.12s}
+  .car-img{height:96px;border-radius:9px;overflow:hidden;margin-bottom:10px;background:var(--navy-050)}
+  .car-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .otel-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px} /* kural: bölgedeki öneri sayısı kadar kolon, en fazla 5 */
+  @media(max-width:1100px){.otel-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media(max-width:640px){.otel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+  .otel-card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;transition:.12s;display:flex;flex-direction:column}
+  .otel-card:hover{border-color:var(--navy)}
+  .otel-card.sel{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy-050)}
+  .oc-photo{aspect-ratio:4/3;background:var(--navy-050)}
+  .oc-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .oc-body{padding:9px 10px 11px;display:flex;flex-direction:column;gap:3px;flex:1}
+  .oc-n{font-size:12px;font-weight:700;line-height:1.25}
+  .oc-s{font-size:10.5px;color:var(--muted);line-height:1.35}
+  .oc-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:6px}
+  .oc-p{font-size:13px;font-weight:800}
+  .oc-link{font-size:10px;color:var(--navy);text-decoration:underline}
+  .air-line{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--ink)}
+  .air-b{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:9px;font-weight:800;color:#fff;flex:none;letter-spacing:.02em}
+  .air-b.tk{background:#C90019}
+  .air-b.pc{background:#FFC400;color:#21245C}
+  .leg>.air-b{width:28px;height:28px;border-radius:7px;font-size:10px}
   .car:hover{border-color:var(--navy)}
   .car.sel{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy-050)}
   .car-img{height:56px;display:grid;place-items:center;margin-bottom:8px;color:var(--navy)}
@@ -938,7 +959,7 @@
           <div class="pkg">
             <div class="pkg-head"><span class="pkg-name">Paket A</span><span class="pill soft">En Ucuz</span></div>
             <div class="legs">
-              <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg></span><div class="leg-body"><div class="leg-t">Pegasus · 14:10 → 16:00</div><div class="leg-s">direkt · 1s 50d</div></div><div class="leg-p">₺1.980</div></div>
+              <div class="leg"><span class="air-b pc">PC</span><div class="leg-body"><div class="air-line">Pegasus</div><div class="leg-t">14:10 → 16:00</div><div class="leg-s">direkt · 1s 50d</div></div><div class="leg-p">₺1.980</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg></span><div class="leg-body"><div class="leg-t">Ekonomik · Fiat Egea</div><div class="leg-s">DIY havalimanı teslim · 2 gün</div></div><div class="leg-p">₺980</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bed"/></svg></span><div class="leg-body"><div class="leg-t">Otel Diyar · 3★</div><div class="leg-s">risk adresine 5,1 km · 2 gece</div></div><div class="leg-p">₺1.350</div></div>
             </div>
@@ -949,7 +970,7 @@
           <div class="pkg reco">
             <div class="pkg-head"><span class="pkg-name">Paket B</span><span class="pill mint">AI · En Dengeli</span></div>
             <div class="legs">
-              <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg></span><div class="leg-body"><div class="leg-t">THY · 07:20 → 09:05</div><div class="leg-s">direkt · 1s 45d · sabah</div></div><div class="leg-p">₺2.450</div></div>
+              <div class="leg"><span class="air-b tk">TK</span><div class="leg-body"><div class="air-line">Türk Hava Yolları</div><div class="leg-t">07:20 → 09:05</div><div class="leg-s">direkt · 1s 45d · sabah</div></div><div class="leg-p">₺2.450</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg></span><div class="leg-body"><div class="leg-t">Ekonomik · Renault Clio</div><div class="leg-s">DIY havalimanı teslim · 2 gün</div></div><div class="leg-p">₺1.100</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bed"/></svg></span><div class="leg-body"><div class="leg-t">Grand Diyarbakır · 4★</div><div class="leg-s">risk adresine 3,2 km · 2 gece</div></div><div class="leg-p">₺1.800</div></div>
             </div>
@@ -960,7 +981,7 @@
           <div class="pkg">
             <div class="pkg-head"><span class="pkg-name">Paket C</span><span class="pill soft">En Hızlı</span></div>
             <div class="legs">
-              <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg></span><div class="leg-body"><div class="leg-t">THY · 06:40 → 08:20</div><div class="leg-s">direkt · 1s 40d · en erken</div></div><div class="leg-p">₺2.900</div></div>
+              <div class="leg"><span class="air-b tk">TK</span><div class="leg-body"><div class="air-line">Türk Hava Yolları</div><div class="leg-t">06:40 → 08:20</div><div class="leg-s">direkt · 1s 40d · en erken</div></div><div class="leg-p">₺2.900</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg></span><div class="leg-body"><div class="leg-t">SUV · Dacia Duster</div><div class="leg-s">arazi/kış şartı · 2 gün</div></div><div class="leg-p">₺1.600</div></div>
               <div class="leg"><span class="leg-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bed"/></svg></span><div class="leg-body"><div class="leg-t">Class Otel · 5★</div><div class="leg-s">risk adresine 1,8 km · 2 gece</div></div><div class="leg-p">₺2.600</div></div>
             </div>
@@ -979,19 +1000,19 @@
           <div class="cust-sec">
             <h3><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg> Uçuş · Gidiş (İstanbul → Diyarbakır, 26 Ağu)</h3>
             <div class="opt-list">
-              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2900,'THY 06:40')"><span class="radio"></span><div class="o-body"><div class="o-t">THY · 06:40 → 08:20</div><div class="o-s">direkt · 1s 40d · en erken</div></div><div class="o-p">₺2.900</div></div>
-              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2450,'THY 07:20')"><span class="radio"></span><div class="o-body"><div class="o-t">THY · 07:20 → 09:05</div><div class="o-s">direkt · 1s 45d · sabah · randevuya uygun</div></div><div class="o-p">₺2.450</div></div>
-              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2100,'Pegasus 09:30')"><span class="radio"></span><div class="o-body"><div class="o-t">Pegasus · 09:30 → 11:15</div><div class="o-s">direkt · 1s 45d</div></div><div class="o-p">₺2.100</div></div>
-              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',1980,'Pegasus 14:10')"><span class="radio"></span><div class="o-body"><div class="o-t">Pegasus · 14:10 → 16:00</div><div class="o-s">direkt · 1s 50d · öğleden sonra</div></div><div class="o-p">₺1.980</div></div>
+              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2900,'THY 06:40')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b tk">TK</span>Türk Hava Yolları</div><div class="o-t">06:40 → 08:20</div><div class="o-s">direkt · 1s 40d · en erken</div></div><div class="o-p">₺2.900</div></div>
+              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2450,'THY 07:20')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b tk">TK</span>Türk Hava Yolları</div><div class="o-t">07:20 → 09:05</div><div class="o-s">direkt · 1s 45d · sabah · randevuya uygun</div></div><div class="o-p">₺2.450</div></div>
+              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',2100,'Pegasus 09:30')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b pc">PC</span>Pegasus</div><div class="o-t">09:30 → 11:15</div><div class="o-s">direkt · 1s 45d</div></div><div class="o-p">₺2.100</div></div>
+              <div class="opt pickable" data-g="gidis" onclick="pick(this,'gidis',1980,'Pegasus 14:10')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b pc">PC</span>Pegasus</div><div class="o-t">14:10 → 16:00</div><div class="o-s">direkt · 1s 50d · öğleden sonra</div></div><div class="o-p">₺1.980</div></div>
             </div>
           </div>
 
           <div class="cust-sec">
             <h3><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-plane"/></svg> Uçuş · Dönüş (Diyarbakır → İstanbul, 28 Ağu)</h3>
             <div class="opt-list">
-              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',2500,'THY 12:10')"><span class="radio"></span><div class="o-body"><div class="o-t">THY · 12:10 → 13:55</div><div class="o-s">direkt · 1s 45d · öğle</div></div><div class="o-p">₺2.500</div></div>
-              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',2300,'THY 17:40')"><span class="radio"></span><div class="o-body"><div class="o-t">THY · 17:40 → 19:25</div><div class="o-s">direkt · 1s 45d · akşam</div></div><div class="o-p">₺2.300</div></div>
-              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',1850,'Pegasus 20:15')"><span class="radio"></span><div class="o-body"><div class="o-t">Pegasus · 20:15 → 22:00</div><div class="o-s">direkt · 1s 45d · geç akşam</div></div><div class="o-p">₺1.850</div></div>
+              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',2500,'THY 12:10')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b tk">TK</span>Türk Hava Yolları</div><div class="o-t">12:10 → 13:55</div><div class="o-s">direkt · 1s 45d · öğle</div></div><div class="o-p">₺2.500</div></div>
+              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',2300,'THY 17:40')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b tk">TK</span>Türk Hava Yolları</div><div class="o-t">17:40 → 19:25</div><div class="o-s">direkt · 1s 45d · akşam</div></div><div class="o-p">₺2.300</div></div>
+              <div class="opt pickable" data-g="donus" onclick="pick(this,'donus',1850,'Pegasus 20:15')"><span class="radio"></span><div class="o-body"><div class="air-line"><span class="air-b pc">PC</span>Pegasus</div><div class="o-t">20:15 → 22:00</div><div class="o-s">direkt · 1s 45d · geç akşam</div></div><div class="o-p">₺1.850</div></div>
             </div>
           </div>
 
@@ -999,17 +1020,17 @@
             <h3><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-car"/></svg> Araç Kiralama (havalimanı teslim · 2 gün)</h3>
             <div class="cars">
               <div class="car pickable" data-g="arac" onclick="pick(this,'arac',980,'Fiat Egea')">
-                <div class="car-img"><svg viewBox="0 0 120 56" width="98" height="46"><use href="#ic-car-sedan"/></svg></div>
+                <div class="car-img"><img src="media/arac-egea.jpg" alt="Fiat Egea" loading="lazy"></div>
                 <div class="car-n">Fiat Egea</div><div class="car-seg">Ekonomik · sedan · dizel</div>
                 <div class="car-p">₺980 <span>/2 gün</span></div>
               </div>
               <div class="car pickable" data-g="arac" onclick="pick(this,'arac',1100,'Renault Clio')">
-                <div class="car-img"><svg viewBox="0 0 120 56" width="98" height="46"><use href="#ic-car-hatch"/></svg></div>
+                <div class="car-img"><img src="media/arac-clio.jpg" alt="Renault Clio" loading="lazy"></div>
                 <div class="car-n">Renault Clio</div><div class="car-seg">Kompakt · hatchback</div>
                 <div class="car-p">₺1.100 <span>/2 gün</span></div>
               </div>
               <div class="car pickable" data-g="arac" onclick="pick(this,'arac',1600,'Dacia Duster')">
-                <div class="car-img"><svg viewBox="0 0 120 56" width="102" height="48"><use href="#ic-car-suv"/></svg></div>
+                <div class="car-img"><img src="media/arac-duster.jpg" alt="Dacia Duster" loading="lazy"></div>
                 <div class="car-n">Dacia Duster</div><div class="car-seg">SUV · 4x4 · kış/arazi</div>
                 <div class="car-p">₺1.600 <span>/2 gün</span></div>
               </div>
@@ -1018,17 +1039,32 @@
 
           <div class="cust-sec">
             <h3><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bed"/></svg> Otel (risk adresine yakınlık · 2 gece)</h3>
-            <div class="hotel-hero pickable" data-g="otel" onclick="pick(this,'otel',1800,'Grand Diyarbakır')">
-              <div class="h-photo"><img src="media/hotel-grand.png" alt="Grand Diyarbakır oteli" loading="lazy"></div>
-              <div class="h-body">
-                <div class="h-name">Grand Diyarbakır · 4★</div>
-                <div class="h-meta">risk adresine 3,2 km · 2 gece · kahvaltı dahil · ücretsiz otopark</div>
-                <div class="h-foot"><a class="h-link" href="https://www.google.com/search?q=Grand+Otel+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">Oteli İncele →</a><span class="h-p">₺1.800</span></div>
+            <div class="otel-grid">
+              <div class="otel-card pickable" data-g="otel" onclick="pick(this,'otel',1800,'Grand Diyarbakır')">
+                <div class="oc-photo"><img src="media/hotel-grand.jpg" alt="Grand Diyarbakır" loading="lazy"></div>
+                <div class="oc-body"><div class="oc-n">Grand Diyarbakır · 4★</div><div class="oc-s">3,2 km · 2 gece · kahvaltı · otopark</div>
+                <div class="oc-foot"><a class="oc-link" href="https://www.google.com/search?q=Grand+Otel+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a><span class="oc-p">₺1.800</span></div></div>
               </div>
-            </div>
-            <div class="opt-list">
-              <div class="opt pickable" data-g="otel" onclick="pick(this,'otel',1350,'Otel Diyar')"><span class="radio"></span><div class="o-body"><div class="o-t">Otel Diyar · 3★</div><div class="o-s">risk adresine 5,1 km · 2 gece · <a href="https://www.google.com/search?q=Otel+Diyar+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a></div></div><div class="o-p">₺1.350</div></div>
-              <div class="opt pickable" data-g="otel" onclick="pick(this,'otel',2600,'Class Otel')"><span class="radio"></span><div class="o-body"><div class="o-t">Class Otel · 5★</div><div class="o-s">risk adresine 1,8 km · 2 gece · spa · <a href="https://www.google.com/search?q=Class+Otel+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a></div></div><div class="o-p">₺2.600</div></div>
+              <div class="otel-card pickable" data-g="otel" onclick="pick(this,'otel',2600,'Class Otel')">
+                <div class="oc-photo"><img src="media/otel-liluz.jpg" alt="Class Otel" loading="lazy"></div>
+                <div class="oc-body"><div class="oc-n">Class Otel · 5★</div><div class="oc-s">1,8 km · 2 gece · spa</div>
+                <div class="oc-foot"><a class="oc-link" href="https://www.google.com/search?q=Class+Otel+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a><span class="oc-p">₺2.600</span></div></div>
+              </div>
+              <div class="otel-card pickable" data-g="otel" onclick="pick(this,'otel',2100,'Dicle Park Hotel')">
+                <div class="oc-photo"><img src="media/otel-dicle.jpg" alt="Dicle Park Hotel" loading="lazy"></div>
+                <div class="oc-body"><div class="oc-n">Dicle Park Hotel · 4★</div><div class="oc-s">6,4 km · 2 gece · nehir manzara</div>
+                <div class="oc-foot"><a class="oc-link" href="https://www.google.com/search?q=Dicle+Park+Hotel+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a><span class="oc-p">₺2.100</span></div></div>
+              </div>
+              <div class="otel-card pickable" data-g="otel" onclick="pick(this,'otel',1550,'Mezopotamya Konağı')">
+                <div class="oc-photo"><img src="media/otel-mezopotamya.jpg" alt="Mezopotamya Konağı" loading="lazy"></div>
+                <div class="oc-body"><div class="oc-n">Mezopotamya Konağı · 4★</div><div class="oc-s">2,6 km · 2 gece · Sur içi butik</div>
+                <div class="oc-foot"><a class="oc-link" href="https://www.google.com/search?q=Mezopotamya+Kona%C4%9F%C4%B1+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a><span class="oc-p">₺1.550</span></div></div>
+              </div>
+              <div class="otel-card pickable" data-g="otel" onclick="pick(this,'otel',1350,'Otel Diyar')">
+                <div class="oc-photo"><img src="media/otel-surpalas.jpg" alt="Otel Diyar" loading="lazy"></div>
+                <div class="oc-body"><div class="oc-n">Otel Diyar · 3★</div><div class="oc-s">5,1 km · 2 gece · merkez</div>
+                <div class="oc-foot"><a class="oc-link" href="https://www.google.com/search?q=Otel+Diyar+Diyarbak%C4%B1r" target="_blank" rel="noopener" onclick="event.stopPropagation()">İncele →</a><span class="oc-p">₺1.350</span></div></div>
+              </div>
             </div>
           </div>
 
