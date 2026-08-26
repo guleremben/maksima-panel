@@ -37,6 +37,21 @@
   .sb-user{display:flex;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid hsl(0 0% 100% / .1);margin-top:8px}
   .sb-user .av{width:32px;height:32px;border-radius:50%;background:var(--gold-soft);color:var(--navy-800);display:grid;place-items:center;font-weight:700;font-size:13px}
   .sb-user .nm{font-size:12.5px;font-weight:600} .sb-user .rl{font-size:10.5px;color:#AEBDC4}
+  .sb-user{cursor:pointer;border-radius:9px;transition:.13s}
+  .sb-user:hover{background:hsl(0 0% 100% / .07)}
+  .sb-user:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  /* ---- Profilim ---- */
+  .pf-head{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+  .pf-av{width:62px;height:62px;border-radius:50%;background:var(--gold-soft);color:var(--navy-800);display:grid;place-items:center;font-weight:700;font-size:21px;flex:none}
+  .pf-nm{font-size:19px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pf-rl{font-size:12px;color:var(--muted);margin-top:3px}
+  .pf-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;background:var(--navy);color:#fff;border-radius:999px;padding:3px 10px}
+  .pf-lock{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;flex:none}
+  .pf-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  @media(max-width:1100px){.pf-grid{grid-template-columns:1fr}}
+  .pf-val{font-size:13px;font-weight:600}
+  .pf-h3{margin:0 0 2px;font-size:14px;display:flex;align-items:center;gap:7px}
+  .pf-h3 svg{width:15px;height:15px;color:var(--navy);flex:none}
 
   /* ---------- MAIN ---------- */
   .main{flex:1;display:flex;flex-direction:column;min-width:0}
@@ -696,6 +711,9 @@
   <g id="ic-coins"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13.5 6.2a5.5 5.5 0 1 1 0 11.1"/></g>
   <g id="ic-shield"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/></g>
   <g id="ic-plug"><path d="M9 8V3M15 8V3M7 8h10v3a5 5 0 0 1-10 0zM12 16v5"/></g>
+  <g id="ic-phone"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></g>
+  <g id="ic-bell"><path d="M18 9a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a1.8 1.8 0 0 0 3 0"/></g>
+  <g id="ic-lock"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></g>
 </defs></svg>
 <div class="shell">
   <!-- ============ SIDEBAR ============ -->
@@ -724,9 +742,9 @@
     <button class="nav-item" data-view="ayarlar"><img class="ic" src="icons/ayarlar.png" alt=""> Ayarlar</button>
 
     <div class="sb-spacer"></div>
-    <div class="sb-user">
+    <div class="sb-user" onclick="go('profil')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();go('profil');}" tabindex="0" role="button" aria-label="Profilim" title="Profilim">
       <div class="av">EG</div>
-      <div><div class="nm">Emrah Güler</div><div class="rl">Yönetici</div></div>
+      <div><div class="nm">Emrah Güler</div><div class="rl">Süper Admin</div></div>
     </div>
   </aside>
 
@@ -1319,6 +1337,60 @@
           </div>
         </div>
       </section>
+
+      <!-- ---- PROFİLİM ---- -->
+      <section class="view" data-view="profil">
+        <div class="pf-head">
+          <div class="pf-av">EG</div>
+          <div>
+            <div class="pf-nm">Emrah Güler <span class="pf-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg> Süper Admin</span></div>
+            <div class="pf-rl">Genel Müdür · Yönetim — bu sayfada yalnız <b>kendi</b> bilgilerinizi görür ve düzenlersiniz (KVKK)</div>
+          </div>
+        </div>
+        <div class="pf-grid">
+          <div>
+            <div class="set-block">
+              <h3 class="pf-h3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-user"/></svg> Künye</h3>
+              <div class="sr-d">Resmi alanlar — değişiklik İK talebine dönüşür (Süper Admin onayı)</div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Ad Soyad</div></div><div class="sr-c"><span class="pf-val">Emrah Güler</span><span class="pf-lock"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg> İK onaylı</span></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Görev / Unvan</div></div><div class="sr-c"><span class="pf-val">Genel Müdür</span><span class="pf-lock"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg> İK onaylı</span></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Departman</div></div><div class="sr-c"><span class="pf-val">Yönetim</span><span class="pf-lock"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg> İK onaylı</span></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">İşe Başlangıç</div></div><div class="sr-c"><span class="pf-val">04.01.2010</span><span class="pf-lock"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-lock"/></svg> İK onaylı</span></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Onaylı alanda düzeltme mi gerekiyor?</div><div class="sr-d">Talep İK kuyruğuna düşer; onaydan sonra kayıt güncellenir.</div></div><div class="sr-c"><button class="btn" onclick="dqToast('Değişiklik talebi İK kuyruğuna gönderildi — Süper Admin onayı bekler.')">Değişiklik Talebi</button></div></div>
+            </div>
+            <div class="set-block">
+              <h3 class="pf-h3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-phone"/></svg> İletişim</h3>
+              <div class="sr-d">Serbest alanlar — kaydedince canlıda Frappe HR self-servise yazılır</div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Telefon</div></div><div class="sr-c"><input class="set-input" id="pfTel" type="tel" placeholder="0xxx xxx xx xx"></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Giriş E-postası</div><div class="sr-d">Kurulumda tanımlanır — kaynak: KULLANICI_ROL_ATAMASI</div></div><div class="sr-c"><span class="pf-val" style="color:var(--muted)">belirlenecek</span></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Adres</div></div><div class="sr-c"><input class="set-input" id="pfAdres" style="width:230px" placeholder="il · ilçe · açık adres"></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Acil Durum Kişisi</div></div><div class="sr-c"><input class="set-input" id="pfAcil" style="width:230px" placeholder="ad · yakınlık · telefon"></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-d">Değişiklikler yalnız bu cihazda saklanır (prototip).</div></div><div class="sr-c"><button class="btn primary" onclick="pfKaydet()">Kaydet</button></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="set-block">
+              <h3 class="pf-h3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-shield"/></svg> Güvenlik</h3>
+              <div class="sr-d">Canlıda Frappe User katmanı — şifre, iki adımlı doğrulama, oturumlar</div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Şifre</div><div class="sr-d">İlk girişte davet e-postasıyla belirlenir; buradan değiştirilir.</div></div><div class="sr-c"><span class="pf-val">••••••••</span><button class="btn" onclick="dqToast('Şifre değiştirme canlı sistemde bu düğmeden yapılır (Frappe User).')">Şifre Değiştir</button></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">İki Adımlı Doğrulama (2FA)</div><div class="sr-d">Süper Admin hesaplarında zorunlu — kapatılamaz.</div></div><div class="sr-c"><button class="tgl on" onclick="dqToast('Süper Admin hesaplarında 2FA zorunludur — kapatılamaz.')"></button></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Aktif Oturumlar</div><div class="sr-d">Bu cihaz · macOS · şimdi</div></div><div class="sr-c"><button class="btn" onclick="dqToast('Diğer tüm oturumlar kapatıldı.')">Diğerlerini Kapat</button></div></div>
+            </div>
+            <div class="set-block">
+              <h3 class="pf-h3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-bell"/></svg> Bildirim Tercihleri</h3>
+              <div class="sr-d">Bildirimler yalnız uygulama içidir (zil) — harici SMS/e-posta gönderilmez.</div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Yeni ihbar bildirimi</div></div><div class="sr-c"><button class="tgl on" onclick="tglSet(this,'Yeni ihbar bildirimi')"></button></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">İzin onay bildirimi</div></div><div class="sr-c"><button class="tgl on" onclick="tglSet(this,'İzin onay bildirimi')"></button></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Gecikme uyarıları (30 gün+)</div></div><div class="sr-c"><button class="tgl on" onclick="tglSet(this,'Gecikme uyarıları')"></button></div></div>
+            </div>
+            <div class="set-block">
+              <h3 class="pf-h3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic-doc"/></svg> Rol Notları</h3>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">Eksper profillerinde ek kart</div><div class="sr-d">SEDDK Levha (no + bitiş tarihi) — değişikliği İK onaylı; Personel ekranındaki lisans uyarıları bu tek kaynaktan beslenir.</div></div></div>
+              <div class="set-row"><div class="sr-b"><div class="sr-t">info@ ortak hesabı</div><div class="sr-d">Profil sayfası açılmaz (kişi değil kutu) — yalnız İhbar Girişi sekmesini görür.</div></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -1357,7 +1429,8 @@ const TITLES={
   takvim:['Takvim & Seyahat','Randevu ve seyahat motoru'],
   arsiv:['Arşiv & Arama','16-yıl semantik arşiv'],
   finans:['Finans','Fatura · tahsilat'],
-  ayarlar:['Ayarlar','Sistem yapılandırması']
+  ayarlar:['Ayarlar','Sistem yapılandırması'],
+  profil:['Profilim','Hesap bilgileri · güvenlik · tercihler']
 };
 let frameLoaded=false;
 function go(view){
@@ -2634,6 +2707,20 @@ function calShift(d){CAL_M+=d;if(CAL_M<0){CAL_M=11;CAL_Y--;}if(CAL_M>11){CAL_M=0
 function calToday(){CAL_Y=+BUGUN.slice(0,4);CAL_M=+BUGUN.slice(5,7)-1;CAL_SEL=BUGUN;renderCal();}
 function calSel(iso){CAL_SEL=iso;renderCal();}
 renderCal();
+
+/* ---- Profilim ---- */
+function initProfil(){
+  try{const p=JSON.parse(localStorage.getItem('mx_profil')||'{}');
+    if(p.tel)el('pfTel').value=p.tel;
+    if(p.adres)el('pfAdres').value=p.adres;
+    if(p.acil)el('pfAcil').value=p.acil;
+  }catch(e){}
+}
+function pfKaydet(){
+  localStorage.setItem('mx_profil',JSON.stringify({tel:el('pfTel').value.trim(),adres:el('pfAdres').value.trim(),acil:el('pfAcil').value.trim()}));
+  dqToast('İletişim bilgileri kaydedildi — canlıda Frappe HR self-servise yazılır.');
+}
+initProfil();
 </script>
 </body>
 </html>
